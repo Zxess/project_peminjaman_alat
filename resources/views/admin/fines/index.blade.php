@@ -121,12 +121,12 @@
                                 </td>
 
                                 <td class="text-center">
-                                    <a href="{{ route('admin.fines.show', $fine->id) }}" class="btn btn-info btn-sm me-1">
+                                    <a href="{{ route($routePrefix . '.fines.show', $fine->id) }}" class="btn btn-info btn-sm me-1">
                                         <i class="fas fa-eye me-1"></i>Lihat
                                     </a>
 
                                     @if($fine->status === 'pending')
-                                        <a href="{{ route('admin.fines.pay', $fine->id) }}" class="btn btn-success btn-sm">
+                                        <a href="{{ route($routePrefix . '.fines.pay', $fine->id) }}" class="btn btn-success btn-sm">
                                             <i class="fas fa-credit-card me-1"></i>Bayar
                                         </a>
                                     @endif

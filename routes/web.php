@@ -59,8 +59,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:petugas'])->group(function () { 
     Route::get('/petugas/dashboard', [PetugasController::class, 'index']); 
     Route::post('/petugas/approve/{id}', [PetugasController::class, 'approve']); // Menyetujui 
+    Route::post('/petugas/reject/{id}', [PetugasController::class, 'reject']); // Menolak 
     Route::post('/petugas/return/{id}', [PetugasController::class, 'processReturn']); // Pengembalian 
     Route::get('/petugas/laporan', [PetugasController::class, 'report']); // Cetak Laporan 
+    Route::resource('petugas/fines', FineController::class)->names('petugas.fines'); 
+    Route::get('petugas/fines/{id}/pay', [FineController::class, 'payForm'])->name('petugas.fines.pay'); 
+    Route::post('petugas/fines/{id}/pay', [FineController::class, 'pay'])->name('petugas.fines.process');
 }); 
  
 Route::middleware(['auth', 'role:peminjam'])->group(function () { 

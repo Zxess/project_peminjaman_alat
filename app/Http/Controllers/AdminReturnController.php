@@ -54,8 +54,9 @@ class AdminReturnController extends Controller
         // Calculate and save fine if late
         $fineAmount = $loan->calculateFine();
         if ($fineAmount > 0) {
-            Fine::create([
+            Fine::firstOrCreate([
                 'loan_id' => $loan->id,
+            ], [
                 'amount' => $fineAmount,
                 'status' => 'pending',
                 'reason' => 'Keterlambatan pengembalian alat'

@@ -619,11 +619,22 @@
                                 </a>
                             </li> 
                         @elseif(auth()->user()->role == 'petugas') 
+                            @php
+                                $pendingFinesCount = \App\Models\Fine::where('status', 'pending')->count();
+                            @endphp
                             <li class="nav-item-custom">
                                 <a class="nav-link-custom {{ request()->is('petugas/dashboard') ? 'active' : '' }}" href="/petugas/dashboard">
                                     <i class="fas fa-check-double"></i> Validasi
                                 </a>
                             </li> 
+                            <li class="nav-item-custom">
+                                <a class="nav-link-custom {{ request()->is('petugas/fines*') ? 'active' : '' }}" href="{{ route('petugas.fines.index') }}">
+                                    <i class="fas fa-money-bill-wave"></i> Denda
+                                    @if($pendingFinesCount > 0)
+                                        <span class="badge bg-danger ms-1">{{ $pendingFinesCount }}</span>
+                                    @endif
+                                </a>
+                            </li>
                             <li class="nav-item-custom">
                                 <a class="nav-link-custom {{ request()->is('petugas/laporan') ? 'active' : '' }}" href="/petugas/laporan">
                                     <i class="fas fa-chart-line"></i> Laporan

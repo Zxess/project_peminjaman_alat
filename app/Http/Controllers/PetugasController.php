@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
  
 use App\Models\Loan; 
 use App\Models\Tool; 
+use App\Models\Fine; 
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth; 
  
@@ -34,16 +35,47 @@ class PetugasController extends Controller
         $tool->decrement('stok');          
         return back()->with('success', 'Peminjaman disetujui.'); 
     } 
- 
+
+    public function reject($id) {
+        $loan = Loan::findOrFail($id);
+
+        if ($loan->status !== 'pending') {
+            return back()->with('error', 'Hanya permintaan pending yang bisa ditolak.');
+        }
+
+        $loan->update([
+            'status' => 'ditolak',
+            'petugas_id' => Auth::id()
+        ]);
+
+        return back()->with('success', 'Peminjaman telah ditolak.');
+    }
+
     public function processReturn($id) { 
         $loan = Loan::findOrFail($id); 
+
+        if ($loan->status !== 'disetujui') {
+            return back()->with('error', 'Status peminjaman tidak valid untuk pengembalian.');
+        }
+
         $loan->update([ 
             'status' => 'kembali', 
             'tanggal_kembali_aktual' => now() 
         ]); 
         $tool = Tool::find($loan->tool_id); 
         $tool->increment('stok'); 
- 
+
+        $fineAmount = $loan->calculateFine();
+        if ($fineAmount > 0) {
+            Fine::firstOrCreate([
+                'loan_id' => $loan->id,
+            ], [
+                'amount' => $fineAmount,
+                'status' => 'pending',
+                'reason' => 'Keterlambatan pengembalian alat'
+            ]);
+        }
+
         return back()->with('success', 'Alat telah dikembalikan.'); 
     } 
  

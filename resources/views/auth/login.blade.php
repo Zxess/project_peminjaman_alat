@@ -397,12 +397,6 @@
                     </form>
                 </div>
 
-                {{-- Or Continue With --}}
-                <div class="divider">
-                    <hr>
-                    <span>Or Continue With</span>
-                </div>
-
                 {{-- Social Buttons --}}
                 {{-- <div class="social-buttons">
                     <a href="{{ route('auth.google') }}" class="social-btn" style="text-decoration: none; color: inherit;">

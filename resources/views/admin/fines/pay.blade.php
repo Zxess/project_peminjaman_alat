@@ -13,7 +13,7 @@
 
     {{-- Back Button --}}
     <div class="d-flex justify-content-start align-items-center mb-4">
-        <a href="{{ route('admin.fines.show', $fine->id) }}" class="btn btn-secondary">
+        <a href="{{ route($routePrefix . '.fines.show', $fine->id) }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-1"></i> Kembali
         </a>
     </div>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.fines.process', $fine->id) }}" method="POST">
+                    <form action="{{ route($routePrefix . '.fines.process', $fine->id) }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end">
-                            <a href="{{ route('admin.fines.show', $fine->id) }}" class="btn btn-secondary me-2">
+                            <a href="{{ route($routePrefix . '.fines.show', $fine->id) }}" class="btn btn-secondary me-2">
                                 <i class="fas fa-times me-1"></i> Batal
                             </a>
                             <button type="submit" class="btn btn-success">

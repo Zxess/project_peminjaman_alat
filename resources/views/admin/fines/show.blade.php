@@ -13,7 +13,7 @@
 
     {{-- Back Button --}}
     <div class="d-flex justify-content-start align-items-center mb-4">
-        <a href="{{ route('admin.fines.index') }}" class="btn btn-secondary">
+        <a href="{{ route($routePrefix . '.fines.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-1"></i> Kembali
         </a>
     </div>
@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="card-body">
-                    <a href="{{ route('admin.fines.pay', $fine->id) }}" class="btn btn-success w-100">
+                    <a href="{{ route($routePrefix . '.fines.pay', $fine->id) }}" class="btn btn-success w-100">
                         <i class="fas fa-credit-card me-1"></i> Proses Pembayaran
                     </a>
                 </div>
