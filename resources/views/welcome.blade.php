@@ -8,26 +8,26 @@
 rel="stylesheet"> 
     <style> 
         .hero-section { 
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+            background: linear-gradient(rgba(12, 201, 106, 0.6), rgba(3, 245, 23, 0.6)), 
 url('https://source.unsplash.com/1600x900/?laboratory,workshop'); 
             background-size: cover; 
             background-position: center; 
-            color: white; 
+            color: rgb(10, 253, 62); 
             padding: 100px 0; 
             border-radius: 0 0 20px 20px; 
         } 
         .feature-icon { 
             font-size: 2rem; 
-            color: #0d6efd; 
+            color: #15fd0d; 
             margin-bottom: 1rem; 
         } 
     </style> 
 </head> 
 <body class="bg-light"> 
  
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top"> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top"> 
         <div class="container"> 
-            <a class="navbar-brand fw-bold" href="#">SIPINJAM</a> 
+            <a class="navbar-brand fw-bold" href="/">MINJEMAN</a> 
             <div class="ms-auto"> 
                 <a href="{{ route('login') }}" class="btn btn-primary px-4">Login</a> 
             </div> 
@@ -80,9 +80,9 @@ terstruktur untuk menghindari kehilangan aset.</p>
         </div> 
     </div> 
  
-    <footer class="bg-dark text-white text-center py-4 mt-auto"> 
+    <footer class="bg-success text-light text-center py-4 mt-auto"> 
         <div class="container"> 
-            <small>&copy; {{ date('Y') }} Sistem Peminjaman Alat. Dibuat dengan Laravel.</small> 
+            <small>&copy; {{ date('D, d M Y') }} Sistem Peminjaman Alat. Dibuat dengan Laravel.</small> 
         </div> 
     </footer> 
  
