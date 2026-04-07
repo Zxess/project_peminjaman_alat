@@ -30,20 +30,15 @@
                         <small class="text-muted">Kembali: {{ $loan->tanggal_kembali_rencana }}</small> 
                     </td> 
                     <td> 
-                        @if($loan->status == 'pending') <span class="badge bg-warning text
-dark">Pending</span> 
-                        @elseif($loan->status == 'disetujui') <span class="badge bg-primary">Sedang 
-Dipinjam</span> 
-                        @elseif($loan->status == 'kembali') <span class="badge bg-success">Sudah 
-Kembali</span> 
+                        @if($loan->status == 'pending') <span class="badge bg-warning text dark">Pending</span> 
+                        @elseif($loan->status == 'disetujui') <span class="badge bg-primary">Sedang Dipinjam</span> 
+                        @elseif($loan->status == 'kembali') <span class="badge bg-success">Sudah Kembali</span> 
                         @elseif($loan->status == 'ditolak') <span class="badge bg-danger">Ditolak</span> 
                         @endif 
                     </td> 
                     <td> 
-                        <a href="{{ route('admin.loans.edit', $loan->id) }}" class="btn btn-sm btn-info 
-text-white">Edit</a> 
-                        <form action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST" 
-class="d-inline" onsubmit="return confirm('Yakin hapus data ini?');"> 
+                        <a href="{{ route('admin.loans.edit', $loan->id) }}" class="btn btn-sm btn-info text-white">Edit</a> 
+                        <form action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus data ini?');"> 
                             @csrf 
                             @method('DELETE') 
                             <button class="btn btn-sm btn-danger">Hapus</button> 

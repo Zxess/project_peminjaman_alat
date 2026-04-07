@@ -3,8 +3,6 @@
 @section('content') 
 <h3>Permintaan Peminjaman Masuk</h3> 
  
-30 
- 
 <div class="card mb-4"> 
     <div class="card-header bg-warning">Menunggu Persetujuan</div> 
     <div class="card-body"> 
@@ -26,8 +24,7 @@
                     <td>{{ $loan->tanggal_pinjam }}</td> 
                     <td>{{ $loan->tanggal_kembali_rencana }}</td> 
                     <td> 
-                        <form action="{{ url('/petugas/approve/'.$loan->id) }}" method="POST" class="d
-inline"> 
+                        <form action="{{ url('/petugas/approve/'.$loan->id) }}" method="POST" class="inline"> 
                             @csrf 
                             <button class="btn btn-success btn-sm">Setujui</button> 
                         </form> 
@@ -86,7 +83,6 @@ inline">
                     <th>Status</th> 
                 </tr> 
  
-31 
             </thead> 
             <tbody> 
                 @foreach($sudahDikembalikan as $sudah) 

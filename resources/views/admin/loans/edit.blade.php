@@ -12,8 +12,7 @@
                 <label>Peminjam</label> 
                 <select name="user_id" class="form-select"> 
                     @foreach($users as $user) 
-                        <option value="{{ $user->id }}" {{ $loan->user_id == $user->id ? 'selected' : '' 
-}}> 
+                        <option value="{{ $user->id }}" {{ $loan->user_id == $user->id ? 'selected' : '' }}> 
                             {{ $user->name }} 
                         </option> 
                     @endforeach 
@@ -24,8 +23,7 @@
                 <label>Alat</label> 
                 <select name="tool_id" class="form-select"> 
                     @foreach($tools as $tool) 
-                        <option value="{{ $tool->id }}" {{ $loan->tool_id == $tool->id ? 'selected' : '' 
-}}> 
+                        <option value="{{ $tool->id }}" {{ $loan->tool_id == $tool->id ? 'selected' : '' }}> 
                             {{ $tool->nama_alat }} 
                         </option> 
                     @endforeach 
@@ -34,33 +32,24 @@
  
             <div class="row mb-3"> 
                 <div class="col"> 
-                    <label>Tgl Pinjam</label> 
- 
-25 
-                    <input type="date" name="tanggal_pinjam" class="form-control" value="{{ $loan
->tanggal_pinjam }}"> 
+                    <label>Tgl Pinjam</label>  
+                    <input type="date" name="tanggal_pinjam" class="form-control" value="{{ $loan>tanggal_pinjam }}"> 
                 </div> 
                 <div class="col"> 
                     <label>Rencana Kembali</label> 
-                    <input type="date" name="tanggal_kembali_rencana" class="form-control" value="{{ 
-$loan->tanggal_kembali_rencana }}"> 
+                    <input type="date" name="tanggal_kembali_rencana" class="form-control" value="{{ $loan->tanggal_kembali_rencana }}"> 
                 </div> 
             </div> 
  
             <div class="mb-3"> 
                 <label>Status</label> 
                 <select name="status" class="form-select"> 
-                    <option value="pending" {{ $loan->status == 'pending' ? 'selected' : '' 
-}}>Pending</option> 
-                    <option value="disetujui" {{ $loan->status == 'disetujui' ? 'selected' : '' 
-}}>Disetujui</option> 
-                    <option value="kembali" {{ $loan->status == 'kembali' ? 'selected' : '' 
-}}>Kembali</option> 
-                    <option value="ditolak" {{ $loan->status == 'ditolak' ? 'selected' : '' 
-}}>Ditolak</option> 
+                    <option value="pending" {{ $loan->status == 'pending' ? 'selected' : '' }}>Pending</option> 
+                    <option value="disetujui" {{ $loan->status == 'disetujui' ? 'selected' : '' }}>Disetujui</option> 
+                    <option value="kembali" {{ $loan->status == 'kembali' ? 'selected' : '' }}>Kembali</option> 
+                    <option value="ditolak" {{ $loan->status == 'ditolak' ? 'selected' : '' }}>Ditolak</option> 
                 </select> 
-                <small class="text-danger">*Mengubah status 'Disetujui' ke 'Kembali' akan menambah stok 
-otomatis.</small> 
+                <small class="text-danger">*Mengubah status 'Disetujui' ke 'Kembali' akan menambah stok otomatis.</small> 
             </div> 
  
             <button class="btn btn-success">Update Data</button> 

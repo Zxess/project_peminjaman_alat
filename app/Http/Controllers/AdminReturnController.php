@@ -9,12 +9,8 @@ use App\Models\ActivityLog;
  
 class AdminReturnController extends Controller 
 { 
-    /** 
-     * READ: Menampilkan Riwayat Pengembalian (History) 
-     */ 
     public function index() 
     { 
-        // Ambil hanya yang statusnya 'kembali' 
         $returns = Loan::with(['user', 'tool']) 
                     ->where('status', 'kembali') 
                     ->latest('tanggal_kembali_aktual') 
@@ -23,13 +19,8 @@ class AdminReturnController extends Controller
         return view('admin.returns.index', compact('returns')); 
     } 
  
-    /** 
-     * CREATE (Form): Menampilkan daftar alat yang SEDANG DIPINJAM 
-     * Admin memilih dari sini untuk dikembalikan. 
-     */ 
     public function create() 
     { 
-        // Ambil data yang statusnya 'disetujui' (Sedang di luar) 
         $activeLoans = Loan::with(['user', 'tool']) 
                         ->where('status', 'disetujui') 
                         ->latest() 
@@ -38,16 +29,11 @@ class AdminReturnController extends Controller
         return view('admin.returns.create', compact('activeLoans')); 
     } 
  
-    /** 
- 
-26 
-     * STORE: Proses Simpan Pengembalian (Action) 
-     */ 
     public function store(Request $request) 
     { 
         $request->validate([ 
             'loan_id' => 'required|exists:loans,id', 
-            'denda' => 'nullable|integer' // Opsional jika mau ada denda 
+            'denda' => 'nullable|integer'  
         ]); 
  
         $loan = Loan::findOrFail($request->loan_id); 
@@ -55,15 +41,12 @@ class AdminReturnController extends Controller
         if ($loan->status != 'disetujui') { 
             return back()->with('error', 'Data tidak valid atau sudah dikembalikan.'); 
         } 
- 
-        // 1. Update Status & Tanggal 
+  
         $loan->update([ 
             'status' => 'kembali', 
             'tanggal_kembali_aktual' => now(), 
-            // 'denda' => $request->denda // Jika tabel loans punya kolom denda 
         ]); 
- 
-        // 2. Kembalikan Stok Alat 
+  
         $tool = Tool::findOrFail($loan->tool_id); 
         $tool->increment('stok'); 
  
@@ -72,14 +55,9 @@ class AdminReturnController extends Controller
         return redirect()->route('admin.returns.index')->with('success', 'Alat berhasil dikembalikan.'); 
     } 
  
-    /** 
-     * EDIT: Edit data pengembalian (Misal salah tanggal) 
-     */ 
     public function edit($id) 
     { 
-        $loan = Loan::findOrFail($id); 
-         
-        // Pastikan hanya bisa edit yang statusnya sudah kembali 
+        $loan = Loan::findOrFail($id);  
         if ($loan->status != 'kembali') { 
             return redirect()->route('admin.returns.index'); 
         } 
@@ -87,9 +65,6 @@ class AdminReturnController extends Controller
         return view('admin.returns.edit', compact('loan')); 
     } 
  
-    /** 
-     * UPDATE: Simpan perubahan data pengembalian 
-     */ 
     public function update(Request $request, $id) 
     { 
         $loan = Loan::findOrFail($id); 
@@ -102,21 +77,12 @@ class AdminReturnController extends Controller
             'tanggal_kembali_aktual' => $request->tanggal_kembali_aktual 
         ]); 
  
-        return redirect()->route('admin.returns.index')->with('success', 'Data pengembalian 
-diperbarui.'); 
+        return redirect()->route('admin.returns.index')->with('success', 'Data pengembalian diperbarui.'); 
     } 
  
-    /** 
-     * DESTROY: Hapus riwayat pengembalian 
-     */ 
     public function destroy($id) 
     { 
-        $loan = Loan::findOrFail($id); 
-         
-        // Jika data dihapus, apakah stok mau dikurangi lagi?  
-        // Biasanya hapus riwayat tidak mempengaruhi stok fisik saat ini, tapi tergantung kebijakan. 
-        // Di sini kita asumsikan hanya hapus arsip. 
-         
+        $loan = Loan::findOrFail($id);
         $loan->delete(); 
  
         return redirect()->route('admin.returns.index')->with('success', 'Riwayat dihapus.'); 

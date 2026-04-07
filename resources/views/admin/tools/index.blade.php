@@ -28,8 +28,7 @@
                         <td>{{ $tools->firstItem() + $key }}</td> 
                         <td> 
                             @if($tool->gambar) 
-                                <img src="{{ asset('storage/' . $tool->gambar) }}" alt="img" class="img
-thumbnail" style="height: 60px;"> 
+                                <img src="{{ asset('storage/' . $tool->gambar) }}" alt="img" class="imgthumbnail" style="height: 60px;"> 
                             @else 
                                 <span class="text-muted small">No Image</span> 
                             @endif 
@@ -37,8 +36,7 @@ thumbnail" style="height: 60px;">
                         <td> 
                             <strong>{{ $tool->nama_alat }}</strong> 
                             <div class="small text-muted text-truncate" style="max-width: 200px;"> 
- 
-16 
+  
                                 {{ $tool->deskripsi }} 
                             </div> 
                         </td> 
@@ -49,14 +47,11 @@ thumbnail" style="height: 60px;">
                         </td> 
                         <td>{{ $tool->stok }} unit</td> 
                         <td> 
-                            <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning btn
-sm"> 
+                            <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning btnsm"> 
                                 Edit 
                             </a> 
                              
-                            <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" 
-class="d-inline" onsubmit="return confirm('Yakin ingin menghapus alat ini? Data peminjaman terkait 
-mungkin akan error.');"> 
+                            <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus alat ini? Data peminjaman terkait mungkin akan error.');"> 
                                 @csrf 
                                 @method('DELETE') 
                                 <button type="submit" class="btn btn-danger btn-sm"> 

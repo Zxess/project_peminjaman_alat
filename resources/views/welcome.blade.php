@@ -4,12 +4,10 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Sistem Peminjaman Alat</title> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-rel="stylesheet"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> 
     <style> 
         .hero-section { 
-            background: linear-gradient(rgba(12, 201, 106, 0.6), rgba(3, 245, 23, 0.6)), 
-url('https://source.unsplash.com/1600x900/?laboratory,workshop'); 
+            background: linear-gradient(rgba(12, 201, 106, 0.6), rgba(3, 245, 23, 0.6)), url('https://source.unsplash.com/1600x900/?laboratory,workshop'); 
             background-size: cover; 
             background-position: center; 
             color: rgb(10, 253, 62); 
@@ -37,10 +35,8 @@ url('https://source.unsplash.com/1600x900/?laboratory,workshop');
     <div class="hero-section text-center mb-5"> 
         <div class="container"> 
             <h1 class="display-4 fw-bold">Peminjaman Alat Jadi Lebih Mudah</h1> 
-            <p class="lead mb-4">Sistem manajemen peminjaman alat laboratorium dan bengkel sekolah yang 
-terintegrasi, cepat, dan transparan.</p> 
-            <a href="{{ route('login') }}" class="btn btn-lg btn-warning fw-bold px-5">Mulai 
-Peminjaman</a> 
+            <p class="lead mb-4">Sistem manajemen peminjaman alat laboratorium dan bengkel sekolah yang terintegrasi, cepat, dan transparan.</p> 
+            <a href="{{ route('login') }}" class="btn btn-lg btn-warning fw-bold px-5">Mulai Peminjaman</a> 
         </div> 
     </div> 
  
@@ -51,8 +47,7 @@ Peminjaman</a>
                     <div class="card-body"> 
                         <div class="feature-icon">   </div> 
                         <h4 class="card-title">Cari Alat</h4> 
-                        <p class="card-text text-muted">Cek ketersediaan stok alat secara real-time tanpa 
-perlu bolak-balik ke ruang penyimpanan.</p> 
+                        <p class="card-text text-muted">Cek ketersediaan stok alat secara real-time tanpa perlu bolak-balik ke ruang penyimpanan.</p> 
                     </div> 
                 </div> 
             </div> 
@@ -61,8 +56,7 @@ perlu bolak-balik ke ruang penyimpanan.</p>
                     <div class="card-body"> 
                         <div class="feature-icon">         </div> 
                         <h4 class="card-title">Ajukan Pinjaman</h4> 
-                        <p class="card-text text-muted">Proses pengajuan peminjaman yang praktis melalui 
-sistem dan persetujuan petugas yang cepat.</p> 
+                        <p class="card-text text-muted">Proses pengajuan peminjaman yang praktis melalui sistem dan persetujuan petugas yang cepat.</p> 
  
                     </div> 
                 </div> 
@@ -72,8 +66,7 @@ sistem dan persetujuan petugas yang cepat.</p>
                     <div class="card-body"> 
                         <div class="feature-icon">   </div> 
                         <h4 class="card-title">Pengembalian</h4> 
-                        <p class="card-text text-muted">Sistem monitoring pengembalian alat yang 
-terstruktur untuk menghindari kehilangan aset.</p> 
+                        <p class="card-text text-muted">Sistem monitoring pengembalian alat yang terstruktur untuk menghindari kehilangan aset.</p> 
                     </div> 
                 </div> 
             </div> 

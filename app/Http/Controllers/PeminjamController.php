@@ -16,7 +16,6 @@ class PeminjamController extends Controller
     } 
      
     public function store(Request $request) { 
-        // Cek stok dulu 
         $tool = Tool::find($request->tool_id); 
         if($tool->stok > 0) { 
             Loan::create([ 
@@ -27,8 +26,6 @@ class PeminjamController extends Controller
                 'status' => 'pending' 
             ]); 
             ActivityLog::record('Tambah Alat', 'Menambahkan alat baru: ' . $request->nama_alat); 
-             
-            // Opsional: Kurangi stok langsung atau saat disetujui (tergantung logika bisnis) 
             return back()->with('success', 'Pengajuan berhasil, menunggu persetujuan.'); 
         } 
     } 

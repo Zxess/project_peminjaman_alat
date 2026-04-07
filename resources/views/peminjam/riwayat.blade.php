@@ -4,8 +4,7 @@
 <div class="card mt-3"> 
     <div class="card-body"> 
         <table class="table"> 
- 
-33 
+  
             <thead> 
                 <tr> 
                     <th>Alat</th> 
@@ -34,11 +33,9 @@
                     </td> 
                     <td> 
                         @if($loan->status == 'disetujui') 
-                            <small class="text-muted">Harap kembalikan ke petugas sebelum tanggal 
-rencana.</small> 
+                            <small class="text-muted">Harap kembalikan ke petugas sebelum tanggal rencana.</small> 
                         @elseif($loan->status == 'kembali') 
-                            <small class="text-success">Diterima tanggal {{ $loan->tanggal_kembali_aktual 
-}}</small> 
+                            <small class="text-success">Diterima tanggal {{ $loan->tanggal_kembali_aktual }}</small> 
                         @endif 
                     </td> 
                 </tr> 

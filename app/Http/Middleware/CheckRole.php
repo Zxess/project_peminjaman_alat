@@ -8,10 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
+    /** .
+     * @param  Closure(Request)
      */
     public function handle(Request $request, Closure $next): Response
     {

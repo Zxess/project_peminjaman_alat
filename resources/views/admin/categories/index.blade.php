@@ -15,9 +15,7 @@
                 <table class="table table-bordered table-striped"> 
                     <thead class="table-dark"> 
                         <tr> 
-                            <th width="10%">No</th> 
- 
-20 
+                            <th width="10%">No</th>  
                             <th>Nama Kategori</th> 
                             <th width="20%">Jumlah Alat</th> 
                             <th width="20%">Aksi</th> 
@@ -34,11 +32,9 @@
                                 </span> 
                             </td> 
                             <td> 
-                                <a href="{{ route('categories.edit', $cat->id) }}" class="btn btn-warning 
-btn-sm">Edit</a> 
+                                <a href="{{ route('categories.edit', $cat->id) }}" class="btn btn-warning btn-sm">Edit</a> 
                                  
-                                <form action="{{ route('categories.destroy', $cat->id) }}" method="POST" 
-class="d-inline" onsubmit="return confirm('Hapus kategori ini?');"> 
+                                <form action="{{ route('categories.destroy', $cat->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus kategori ini?');"> 
                                     @csrf 
                                     @method('DELETE') 
                                     <button class="btn btn-danger btn-sm">Hapus</button> 

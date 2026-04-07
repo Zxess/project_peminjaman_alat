@@ -12,9 +12,7 @@
  
 <div class="card"> 
     <div class="card-header bg-primary text-white">Daftar Alat Sedang Dipinjam</div> 
-    <div class="card-body"> 
- 
-28 
+    <div class="card-body">  
         <table class="table table-hover"> 
             <thead> 
                 <tr> 
@@ -44,8 +42,7 @@
                             @csrf 
                             <input type="hidden" name="loan_id" value="{{ $loan->id }}"> 
                              
-                            <button type="submit" class="btn btn-success btn-sm" onclick="return 
-confirm('Konfirmasi: Barang sudah diterima kembali dan kondisi baik?')"> 
+                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Konfirmasi: Barang sudah diterima kembali dan kondisi baik?')"> 
                                 Proses Kembali 
                             </button> 
                         </form> 
@@ -53,8 +50,7 @@ confirm('Konfirmasi: Barang sudah diterima kembali dan kondisi baik?')">
                 </tr> 
                 @empty 
                 <tr> 
-                    <td colspan="6" class="text-center py-4">Tidak ada alat yang sedang dipinjam saat 
-ini.</td> 
+                    <td colspan="6" class="text-center py-4">Tidak ada alat yang sedang dipinjam saat ini.</td> 
                 </tr> 
                 @endforelse 
             </tbody> 

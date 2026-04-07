@@ -9,10 +9,8 @@
 </div> 
  
 <div class="mb-3"> 
-    <form action="{{ route('users.index') }}" method="GET" class="d-flex gap-2" style="max-width: 
-400px;"> 
-        <input type="text" name="search" class="form-control" placeholder="Cari Nama atau Email..." 
-value="{{ request('search') }}"> 
+    <form action="{{ route('users.index') }}" method="GET" class="d-flex gap-2" style="max-width: 400px;"> 
+        <input type="text" name="search" class="form-control" placeholder="Cari Nama atau Email..." value="{{ request('search') }}"> 
         <button type="submit" class="btn btn-secondary">Cari</button> 
     </form> 
 </div> 
@@ -44,14 +42,12 @@ value="{{ request('search') }}">
                             <span class="badge bg-secondary">Peminjam</span> 
                         @endif 
  
-12 
+
                     </td> 
                     <td> 
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn
-sm">Edit</a> 
+                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn sm">Edit</a> 
                          
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d
-inline" onsubmit="return confirm('Yakin ingin menghapus user ini?');"> 
+                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus user ini?');"> 
                             @csrf 
                             @method('DELETE') 
                             <button type="submit" class="btn btn-danger btn-sm"  

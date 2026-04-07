@@ -15,8 +15,7 @@
                 <p class="card-text">User Terdaftar</p> 
             </div> 
             <div class="card-footer d-flex justify-content-between align-items-center"> 
-                <a href="{{ route('users.index') }}" class="text-white text-decoration-none small">Lihat 
-Detail</a> 
+                <a href="{{ route('users.index') }}" class="text-white text-decoration-none small">Lihat Detail</a> 
                 <span class="small">&rarr;</span> 
             </div> 
         </div> 
@@ -26,13 +25,11 @@ Detail</a>
         <div class="card text-white bg-success mb-3 h-100"> 
             <div class="card-header">Data Alat</div> 
             <div class="card-body"> 
-                <h2 class="card-title">{{ $totalAlat }} <span class="fs-6">(Stok: {{ $totalStok 
-}})</span></h2> 
+                <h2 class="card-title">{{ $totalAlat }} <span class="fs-6">(Stok: {{ $totalStok }})</span></h2> 
                 <p class="card-text">Jenis Alat Tersedia</p> 
             </div> 
             <div class="card-footer d-flex justify-content-between align-items-center"> 
-                <a href="{{ route('tools.index') }}" class="text-white text-decoration-none small">Lihat 
-Detail</a> 
+                <a href="{{ route('tools.index') }}" class="text-white text-decoration-none small">Lihat Detail</a> 
                 <span class="small">&rarr;</span> 
             </div> 
         </div> 
@@ -46,8 +43,7 @@ Detail</a>
                 <p class="card-text">Kategori Alat</p> 
             </div> 
             <div class="card-footer d-flex justify-content-between align-items-center"> 
-                <a href="{{ route('categories.index') }}" class="text-dark text-decoration-none 
-small">Lihat Detail</a> 
+                <a href="{{ route('categories.index') }}" class="text-dark text-decoration-none small">Lihat Detail</a> 
                 <span class="small text-dark">&rarr;</span> 
             </div> 
         </div> 
@@ -61,11 +57,9 @@ small">Lihat Detail</a>
                 <h2 class="card-title">{{ $sedangDipinjam }}</h2> 
                 <p class="card-text">Transaksi Aktif</p> 
  
-9 
             </div> 
             <div class="card-footer d-flex justify-content-between align-items-center"> 
-                <a href="{{ route('admin.loans.index') }}" class="text-white text-decoration-none 
-small">Pantau</a> 
+                <a href="{{ route('admin.loans.index') }}" class="text-white text-decoration-none small">Pantau</a> 
                 <span class="small">&rarr;</span> 
             </div> 
         </div> 
@@ -78,8 +72,7 @@ small">Pantau</a>
                 <p class="card-text">Transaksi Selesai</p> 
             </div> 
             <div class="card-footer d-flex justify-content-between align-items-center"> 
-                <a href="{{ route('admin.returns.index') }}" class="text-white text-decoration-none 
-small">Pantau</a> 
+                <a href="{{ route('admin.returns.index') }}" class="text-white text-decoration-none small">Pantau</a> 
                 <span class="small">&rarr;</span> 
             </div> 
         </div> 
@@ -109,8 +102,7 @@ small">Pantau</a>
                             <td> 
                                 <span class="fw-bold">{{ $log->user->name }}</span> 
                                 <br> 
-                                <span class="badge bg-secondary" style="font-size: 0.7em">{{ 
-ucfirst($log->user->role) }}</span> 
+                                <span class="badge bg-secondary" style="font-size: 0.7em">{{ ucfirst($log->user->role) }}</span> 
                             </td> 
                             <td>{{ $log->action }}</td> 
                             <td class="text-muted small">{{Str::limit($log->description, 50) }}</td> 
@@ -124,8 +116,7 @@ ucfirst($log->user->role) }}</span>
                 </table> 
             </div> 
             <div class="card-footer text-end"> 
-                <a href="{{ url('/admin/logs') }}" class="btn btn-sm btn-outline-secondary">Lihat Semua 
-Log</a> 
+                <a href="{{ url('/admin/logs') }}" class="btn btn-sm btn-outline-secondary">Lihat Semua Log</a> 
             </div> 
         </div> 
     </div> 

@@ -2,8 +2,6 @@
  
 @section('content') 
 <div class="row justify-content-center"> 
- 
-21 
     <div class="col-md-6"> 
         <div class="card"> 
             <div class="card-header fw-bold">Edit Kategori</div> 
@@ -14,9 +12,7 @@
                      
                     <div class="mb-3"> 
                         <label>Nama Kategori</label> 
-                        <input type="text" name="nama_kategori" class="form-control 
-@error('nama_kategori') is-invalid @enderror" value="{{ old('nama_kategori', $category->nama_kategori) 
-}}" required> 
+                        <input type="text" name="nama_kategori" class="form-control @error('nama_kategori') is-invalid @enderror" value="{{ old('nama_kategori', $category->nama_kategori) }}" required> 
                         @error('nama_kategori') 
                             <div class="invalid-feedback">{{ $message }}</div> 
                         @enderror 

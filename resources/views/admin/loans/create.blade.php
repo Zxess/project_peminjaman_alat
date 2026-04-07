@@ -12,9 +12,7 @@
                 <select name="user_id" class="form-select" required> 
                     <option value="">-- Pilih Siswa --</option> 
                     @foreach($users as $user) 
-                        <option value="{{ $user->id }}">{{ $user->name }}</option> 
- 
-24 
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>  
                     @endforeach 
                 </select> 
             </div> 
@@ -24,8 +22,7 @@
                 <select name="tool_id" class="form-select" required> 
                     <option value="">-- Pilih Alat --</option> 
                     @foreach($tools as $tool) 
-                        <option value="{{ $tool->id }}">{{ $tool->nama_alat }} (Stok: {{ $tool->stok 
-}})</option> 
+                        <option value="{{ $tool->id }}">{{ $tool->nama_alat }} (Stok: {{ $tool->stok }})</option> 
                     @endforeach 
                 </select> 
             </div> 
@@ -33,8 +30,7 @@
             <div class="row mb-3"> 
                 <div class="col"> 
                     <label>Tgl Pinjam</label> 
-                    <input type="date" name="tanggal_pinjam" class="form-control" value="{{ date('Y-m-d') 
-}}" required> 
+                    <input type="date" name="tanggal_pinjam" class="form-control" value="{{ date('Y-m-d') }}" required> 
                 </div> 
                 <div class="col"> 
                     <label>Rencana Kembali</label> 

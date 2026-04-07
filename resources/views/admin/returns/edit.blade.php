@@ -17,16 +17,14 @@
  
                     <div class="mb-3"> 
                         <label>Alat</label> 
-                        <input type="text" class="form-control" value="{{ $loan->tool->nama_alat }}" 
-disabled> 
+                        <input type="text" class="form-control" value="{{ $loan->tool->nama_alat }}" disabled> 
                     </div> 
  
                     <div class="mb-3"> 
                         <label>Tanggal Kembali Aktual</label> 
                         <input type="date" name="tanggal_kembali_aktual" class="form-control"  
                                value="{{ $loan->tanggal_kembali_aktual }}" required> 
-                        <small class="text-muted">Ubah tanggal ini jika admin salah input waktu 
-pengembalian.</small> 
+                        <small class="text-muted">Ubah tanggal ini jika admin salah input waktu pengembalian.</small> 
                     </div> 
  
                     <div class="d-flex justify-content-between"> 
