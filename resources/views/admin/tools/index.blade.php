@@ -26,13 +26,13 @@
                     @forelse($tools as $key => $tool) 
                     <tr> 
                         <td>{{ $tools->firstItem() + $key }}</td> 
-                        <td> 
-                            @if($tool->gambar) 
-                                <img src="{{ asset('storage/' . $tool->gambar) }}" alt="img" class="imgthumbnail" style="height: 60px;"> 
-                            @else 
-                                <span class="text-muted small">No Image</span> 
-                            @endif 
-                        </td> 
+                        <td>
+                            @if($tool->gambar)
+                                <img src="{{ Storage::url($tool->gambar) }}" alt="{{ $tool->nama_alat }}" class="img-thumbnail" style="height: 60px; width: auto; object-fit: cover;">
+                            @else
+                                <span class="text-muted small">No Image</span>
+                            @endif
+                        </td>
                         <td> 
                             <strong>{{ $tool->nama_alat }}</strong> 
                             <div class="small text-muted text-truncate" style="max-width: 200px;"> 
@@ -46,8 +46,7 @@
                             </span> 
                         </td> 
                         <td>{{ $tool->stok }} unit</td> 
-                        <td> 
-                            <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning btnsm"> 
+                        <td> <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning btn-sm">
                                 Edit 
                             </a> 
                              

@@ -43,7 +43,9 @@
                 <select name="status" class="form-select"> 
                     <option value="pending">Pending (Menunggu Persetujuan)</option> 
                     <option value="disetujui">Disetujui (Langsung Bawa)</option> 
-                    <option value="kembali">Sudah Kembali (Hanya Catat Riwayat)</option> 
+                    <option value="kembali">Sudah Kembali (Hanya Catat Riwayat)</option>
+                    <option value="ditolak">ditolak (Belum Memenuhi Syarat)</option>
+
                 </select> 
             </div> 
  

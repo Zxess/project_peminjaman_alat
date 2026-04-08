@@ -3,13 +3,23 @@
 <head> 
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Aplikasi Peminjaman Alat</title> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> 
+    <title>Aplikasi Peminjaman Alat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-logo {
+            height: 40px;
+            width: auto;
+            max-width: 50px;
+        }
+    </style>
 </head> 
 <body> 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4"> 
-        <div class="container"> 
-            <a class="navbar-brand" href="#">Sistem Peminjaman</a> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('images/pusdik1.png') }}" alt="Logo" class="navbar-logo me-2">
+                <span>Sistem Peminjaman</span>
+            </a>
             <div class="collapse navbar-collapse"> 
                 <ul class="navbar-nav me-auto"> 
                     @auth 
@@ -30,10 +40,10 @@
                     @endauth 
                 </ul> 
                  
-                <ul class="navbar-nav ms-auto"> 
+                 <ul class="navbar-nav ms-auto"> 
                     @auth 
                         <li class="nav-item dropdown"> 
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bstoggle="dropdown"> 
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> 
                                 {{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }}) 
                             </a> 
                             <ul class="dropdown-menu"> 
@@ -43,7 +53,7 @@
                                         <button type="submit" class="dropdown-item">Logout</button> 
                                     </form> 
                                 </li> 
-                            </ul> 
+                            </ul>
                         </li> 
                     @else 
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li> 

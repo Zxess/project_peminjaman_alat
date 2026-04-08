@@ -36,6 +36,8 @@
                             <small class="text-muted">Harap kembalikan ke petugas sebelum tanggal rencana.</small> 
                         @elseif($loan->status == 'kembali') 
                             <small class="text-success">Diterima tanggal {{ $loan->tanggal_kembali_aktual }}</small> 
+                            @elseif($loan->status == 'ditolak') 
+                            <small class="text-success">Persyaratan Belum Memenuhi</small>
                         @endif 
                     </td> 
                 </tr> 

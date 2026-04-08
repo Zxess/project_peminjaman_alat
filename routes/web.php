@@ -14,7 +14,7 @@ use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth; 
  
  
-Route::get('/', function () { 
+Route::get('', function () { 
  
     if (Auth::check()) { 
         $role = Auth::user()->role; 
@@ -23,14 +23,14 @@ Route::get('/', function () {
         return redirect('/peminjam/dashboard'); 
     } 
  
-    return view('welcome'); 
+    return view('/auth/login'); 
  
 })->name('home'); 
  
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); 
 Route::post('/login', [AuthController::class, 'login']); 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); 
-  
+
 Route::middleware(['auth', 'role:admin'])->group(function () { 
     Route::get('/admin/dashboard', [AdminController::class, 'index']); 
     Route::resource('users', UserController::class);  

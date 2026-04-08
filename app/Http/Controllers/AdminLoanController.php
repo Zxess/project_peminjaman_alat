@@ -82,7 +82,10 @@ dibuat.');
         } 
         elseif ($loan->status == 'disetujui' && $request->status == 'pending') { 
             $tool->increment('stok'); 
-        }  
+        } 
+        elseif ($loan->status == 'ditolak' && $request->status == 'ditolak') { 
+            $tool->increment('stok'); 
+        }   
         $loan->update([ 
             'user_id' => $request->user_id, 
             'tool_id' => $request->tool_id, 
