@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Loan; 
 use App\Models\Tool; 
 use App\Models\ActivityLog; 
+use App\Models\Fine; 
  
 class AdminReturnController extends Controller 
 { 
@@ -49,6 +50,17 @@ class AdminReturnController extends Controller
   
         $tool = Tool::findOrFail($loan->tool_id); 
         $tool->increment('stok'); 
+ 
+        // Calculate and save fine if late
+        $fineAmount = $loan->calculateFine();
+        if ($fineAmount > 0) {
+            Fine::create([
+                'loan_id' => $loan->id,
+                'amount' => $fineAmount,
+                'status' => 'pending',
+                'reason' => 'Keterlambatan pengembalian alat'
+            ]);
+        }
  
         ActivityLog::record('Pengembalian (Admin)', 'Memproses pengembalian alat: ' . $tool->nama_alat); 
  

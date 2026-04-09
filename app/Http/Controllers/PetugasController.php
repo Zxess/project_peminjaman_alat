@@ -14,7 +14,14 @@ class PetugasController extends Controller
         $loans = Loan::where('status', 'pending')->with(['user', 'tool'])->get();  
         $activeLoans = Loan::where('status', 'disetujui')->with(['user', 'tool'])->get(); 
         $sudahDikembalikan = Loan::where('status', 'kembali')->with(['user', 'tool'])->get();    
-        return view('petugas.dashboard', compact('loans', 'activeLoans', 'sudahDikembalikan')); 
+        
+        // Check for overdue loans
+        $overdueLoans = Loan::where('status', 'disetujui')
+                           ->where('tanggal_kembali_rencana', '<', now())
+                           ->with(['user', 'tool'])
+                           ->get();
+        
+        return view('petugas.dashboard', compact('loans', 'activeLoans', 'sudahDikembalikan', 'overdueLoans')); 
     } 
  
     public function approve($id) { 

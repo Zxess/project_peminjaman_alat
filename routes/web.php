@@ -10,6 +10,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\PeminjamController; 
 use App\Http\Controllers\ToolController; 
 use App\Http\Controllers\UserController; 
+use App\Http\Controllers\FineController; 
 use App\Models\ActivityLog; 
 use Illuminate\Support\Facades\Auth; 
  
@@ -29,7 +30,13 @@ Route::get('', function () {
  
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); 
 Route::post('/login', [AuthController::class, 'login']); 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); 
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register'); 
+Route::post('/register', [AuthController::class, 'register']); 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Google OAuth Routes
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback'); 
 
 Route::middleware(['auth', 'role:admin'])->group(function () { 
     Route::get('/admin/dashboard', [AdminController::class, 'index']); 
@@ -38,6 +45,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('categories', CategoryController::class); 
     Route::resource('admin/loans', AdminLoanController::class)->names('admin.loans'); 
     Route::resource('admin/returns', AdminReturnController::class)->names('admin.returns'); 
+    Route::resource('admin/fines', FineController::class)->names('admin.fines'); 
+    Route::get('admin/fines/{id}/pay', [FineController::class, 'payForm'])->name('admin.fines.pay'); 
+    Route::post('admin/fines/{id}/pay', [FineController::class, 'pay'])->name('admin.fines.process'); 
     Route::get('/admin/logs', function() { 
         $logs = ActivityLog::with('user')->latest()->get(); 
         return view('admin.logs', compact('logs')); 
@@ -54,7 +64,8 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 }); 
  
 Route::middleware(['auth', 'role:peminjam'])->group(function () { 
-    Route::get('/peminjam/dashboard', [PeminjamController::class, 'index']); // Daftar Alat 
-    Route::post('/peminjam/ajukan', [PeminjamController::class, 'store']); // Mengajukan 
-    Route::get('/peminjam/riwayat', [PeminjamController::class, 'history']); // Riwayat & Kembalikan 
+    Route::get('/peminjam/dashboard', [PeminjamController::class, 'index'])->name('peminjam.dashboard'); // Daftar Alat 
+    Route::post('/peminjam/ajukan', [PeminjamController::class, 'store'])->name('peminjam.store'); // Mengajukan 
+    Route::get('/peminjam/riwayat', [PeminjamController::class, 'history'])->name('peminjam.riwayat'); // Riwayat & Kembalikan 
+    Route::get('/peminjam/denda', [PeminjamController::class, 'fines'])->name('peminjam.denda'); // Denda Saya
 });
