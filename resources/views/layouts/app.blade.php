@@ -14,54 +14,67 @@
     </style>
 </head> 
 <body> 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="{{ asset('images/pusdik1.png') }}" alt="Logo" class="navbar-logo me-2">
-                <span>Sistem Peminjaman</span>
-            </a>
-            <div class="collapse navbar-collapse"> 
-                <ul class="navbar-nav me-auto"> 
-                    @auth 
-                        @if(auth()->user()->role == 'admin') 
-                            <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}">Kelola Kategori</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('tools.index') }}">Kelola Alat</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Kelola User</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.loans.index') }}">Kelola Peminjaman</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.returns.index') }}">Kelola Pengembalian</a></li> 
-                        @elseif(auth()->user()->role == 'petugas') 
-                            <li class="nav-item"><a class="nav-link" href="/petugas/dashboard">Validasi Peminjaman</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="/petugas/laporan">Laporan</a></li> 
-                        @elseif(auth()->user()->role == 'peminjam') 
-                            <li class="nav-item"><a class="nav-link" href="/peminjam/dashboard">Daftar Alat</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="/peminjam/riwayat">Riwayat Saya</a></li> 
-                        @endif 
-                    @endauth 
-                </ul> 
-                 
-                 <ul class="navbar-nav ms-auto"> 
-                    @auth 
-                        <li class="nav-item dropdown"> 
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> 
-                                {{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }}) 
-                            </a> 
-                            <ul class="dropdown-menu"> 
-                                <li> 
-                                    <form action="{{ route('logout') }}" method="POST"> 
-                                        @csrf 
-                                        <button type="submit" class="dropdown-item">Logout</button> 
-                                    </form> 
-                                </li> 
-                            </ul>
-                        </li> 
-                    @else 
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li> 
-                    @endauth 
-                </ul> 
-            </div> 
-        </div> 
-    </nav> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+    <div class="container">
+        <!-- Logo + Brand -->
+        <a class="navbar-brand d-flex align-items-center fw-semibold" href="/">
+            <img src="{{ asset('images/pusdik1.png') }}" alt="Logo" class="navbar-logo me-2">
+            <span>Sistem Peminjaman</span>
+        </a>
+
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            
+            <ul class="navbar-nav me-auto">
+                @auth 
+                    @if(auth()->user()->role == 'admin') 
+                        <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}">Kategori</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="{{ route('tools.index') }}">Alat</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">User</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.loans.index') }}">Peminjaman</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.returns.index') }}">Pengembalian</a></li> 
+                    @elseif(auth()->user()->role == 'petugas') 
+                        <li class="nav-item"><a class="nav-link" href="/petugas/dashboard">Validasi</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="/petugas/laporan">Laporan</a></li> 
+                    @elseif(auth()->user()->role == 'peminjam') 
+                        <li class="nav-item"><a class="nav-link" href="/peminjam/dashboard">Alat</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="/peminjam/riwayat">Riwayat</a></li> 
+                    @endif 
+                @endauth 
+            </ul>
+
+            <!-- Menu kanan -->
+            <ul class="navbar-nav ms-auto align-items-center">
+                @auth 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <span class="me-1">{{ auth()->user()->name }}</span>
+                            <small class="text-light opacity-75">({{ ucfirst(auth()->user()->role) }})</small>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf 
+                                    <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li> 
+                @else 
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm" href="{{ route('login') }}">Login</a>
+                    </li> 
+                @endauth 
+            </ul>
+        </div>
+    </div>
+</nav>
  
     <div class="container"> 
         @if(session('success')) 
