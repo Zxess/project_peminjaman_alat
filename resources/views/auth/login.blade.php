@@ -366,12 +366,12 @@
                         
                         <div class="form-group">
                             <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-input" placeholder="John Doe" required>
+                            <input type="text" name="name" class="form-input" placeholder="nama kamu" required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Email Address</label>
-                            <input type="email" name="email" class="form-input" placeholder="hello@example.com" required>
+                            <input type="email" name="email" class="form-input" placeholder="nama_gmail_kamu@gmail.com" required>
                             @error('email')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
@@ -429,10 +429,11 @@
         {{-- KOLOM KANAN - ILUSTRASI --}}
         <div class="login-right">
             <div class="illustration">
-                <img src="{{ asset('images/PUSDIK.JPG') }}" alt="Tool Loan Management Illustration" class="illustration-image">
+                <img src="{{ asset('images/pusdik1.png') }}" alt="Tool Loan Management Illustration" class="illustration-image">
                 
-                <h2>Smart Tool Management</h2>
-                <p>Manage your tool loans efficiently and effectively</p>
+                <h2>SISTEM PEMINJAMAN ALAT</h2>
+                <h2>SMK PK PUSDIKHUBAD CIMAHI</h2>
+                <p>Bingung mau minjem alat? Login sekarang!</p>
             </div>
         </div>
     </div>
