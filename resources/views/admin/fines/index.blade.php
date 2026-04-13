@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="dashboard-container">
-    {{-- Welcome Header --}}
+
     <div class="welcome-header">
         <h3>
             <i class="fas fa-money-bill-wave me-2" style="color: #3b82f6;"></i>
@@ -11,7 +11,6 @@
         <p>Kelola denda dan pembayaran keterlambatan pengembalian alat.</p>
     </div>
 
-    {{-- Stats Cards --}}
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="stat-card">

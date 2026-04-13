@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="dashboard-container">
-    {{-- Welcome Header --}}
     <div class="welcome-header">
         <h3>
             <i class="fas fa-tags me-2" style="color: #3b82f6;"></i>
@@ -11,14 +10,12 @@
         <p>Kelola kategori untuk mengorganisir alat peminjaman.</p>
     </div>
 
-    {{-- Action Bar --}}
     <div class="d-flex justify-content-end align-items-center mb-4">
         <a href="{{ route('categories.create') }}" class="btn btn-primary">
             <i class="fas fa-plus me-1"></i> Tambah Kategori
         </a>
     </div>
 
-    {{-- Categories Table --}}
     <div class="row">
         <div class="col-md-12">
             <div class="activity-card">

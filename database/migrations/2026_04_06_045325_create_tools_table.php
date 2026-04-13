@@ -10,13 +10,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tools', function (Blueprint $table) { 
-$table->id(); 
-$table->string('nama_alat'); 
-$table->text('deskripsi')->nullable(); 
-$table->foreignId('category_id')->constrained('categories'); 
-$table->integer('stok'); 
-$table->string('gambar')->nullable(); 
-$table->timestamps(); 
+        $table->id(); 
+        $table->string('nama_alat'); 
+        $table->text('deskripsi')->nullable(); 
+        $table->foreignId('category_id')->constrained('categories'); 
+        $table->integer('stok'); 
+        $table->string('gambar')->nullable(); 
+        $table->timestamps(); 
 });
     }
 

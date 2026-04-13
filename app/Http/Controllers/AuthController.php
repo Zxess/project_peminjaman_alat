@@ -55,34 +55,25 @@ class AuthController extends Controller
         return redirect('/login'); 
     }
 
-    /**
-     * Google OAuth - Redirect to Google Login
-     */
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    /**
-     * Google OAuth - Handle Google Callback
-     */
     public function handleGoogleCallback()
     {
         try {
             $googleUser = Socialite::driver('google')->user();
             
-            // Cek apakah user sudah ada berdasarkan google_id atau email
             $user = User::where('google_id', $googleUser->getId())
                         ->orWhere('email', $googleUser->getEmail())
                         ->first();
             
             if ($user) {
-                // Update google_id jika belum ada
                 if (!$user->google_id) {
                     $user->update(['google_id' => $googleUser->getId()]);
                 }
             } else {
-                // Buat user baru dari Google
                 $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
@@ -91,17 +82,13 @@ class AuthController extends Controller
                     'password' => bcrypt(uniqid('google_', true)), // Random password untuk OAuth
                 ]);
             }
-            
-            // Login user
+
             Auth::login($user, remember: true);
-            
-            // Log activity
+
             ActivityLog::record('Login', 'Pengguna melakukan login via Google');
             
-            // Session regenerate
             request()->session()->regenerate();
-            
-            // Redirect berdasarkan role
+
             if ($user->role == "admin") {
                 return redirect('/admin/dashboard');
             }
