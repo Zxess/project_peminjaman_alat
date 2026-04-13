@@ -194,6 +194,61 @@
         </div>
     </div>
 
+    {{-- Permintaan Pengembalian --}}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <i class="fas fa-upload"></i>
+                    <h5>Permintaan Pengembalian</h5>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-modern">
+                        <thead>
+                            <tr>
+                                <th>Peminjam</th>
+                                <th>Alat</th>
+                                <th>Waktu Pengajuan</th>
+                                <th>Bukti Foto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($returnRequests as $requestLoan)
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">{{ $requestLoan->user->name }}</div>
+                                    <span class="badge-role badge-user">{{ ucfirst($requestLoan->user->role) }}</span>
+                                </td>
+                                <td>{{ $requestLoan->tool->nama_alat }}</td>
+                                <td>{{ $requestLoan->tanggal_kembali_aktual }}</td>
+                                <td>
+                                    <form action="{{ url('/petugas/return/'.$requestLoan->id) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="mb-2">
+                                            <input type="file" name="return_photo" accept="image/*" class="form-control form-control-sm" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fas fa-upload me-1"></i> Upload Bukti
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <div>Belum ada permintaan pengembalian.</div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Sudah Dikembalikan --}}
     <div class="row">
         <div class="col-md-12">

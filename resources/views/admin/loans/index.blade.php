@@ -12,11 +12,11 @@
     </div>
 
     {{-- Action Bar --}}
-    <div class="d-flex justify-content-end align-items-center mb-4">
+    {{-- <div class="d-flex justify-content-end align-items-center mb-4">
         <a href="{{ route('admin.loans.create') }}" class="btn btn-primary">
             <i class="fas fa-plus me-1"></i> Tambah Peminjaman Manual
         </a>
-    </div>
+    </div> --}}
 
     {{-- Loans Table --}}
     <div class="row">
@@ -76,6 +76,8 @@
                                         @if($isOverdue)
                                             <br><span class="action-badge action-delete">TERLAMBAT</span>
                                         @endif
+                                    @elseif($loan->status == 'dikembalikan')
+                                        <span class="action-badge action-warning">Pengembalian Diajukan</span>
                                     @elseif($loan->status == 'kembali')
                                         <span class="action-badge action-login">Sudah Kembali</span>
                                     @elseif($loan->status == 'ditolak')

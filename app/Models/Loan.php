@@ -32,4 +32,9 @@ class Loan extends Model
     {
         return $this->fines()->where('status', 'pending')->sum('amount');
     }
+
+    public function getReturnPhotoUrlAttribute()
+    {
+        return $this->return_photo_path ? asset('storage/' . $this->return_photo_path) : null;
+    }
 } 

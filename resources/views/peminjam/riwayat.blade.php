@@ -151,6 +151,8 @@
                                         @if($isOverdue)
                                             <br><span class="action-badge action-delete">TERLAMBAT</span>
                                         @endif
+                                    @elseif($loan->status == 'dikembalikan')
+                                        <span class="action-badge action-warning">Pengembalian Diajukan</span>
                                     @elseif($loan->status == 'kembali')
                                         <span class="action-badge action-login">Sudah Dikembalikan</span>
                                     @elseif($loan->status == 'ditolak')
@@ -159,7 +161,13 @@
                                 </td>
                                 <td>
                                     @if($loan->status == 'disetujui')
-                                        <small class="text-muted">Harap kembalikan ke petugas sebelum tanggal rencana.</small>
+                                        <form action="{{ route('peminjam.return', $loan->id) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-sm btn-outline-success">Ajukan Pengembalian</button>
+                                        </form>
+                                        <small class="text-muted d-block mt-2">Harap kembalikan ke petugas sebelum tanggal rencana.</small>
+                                    @elseif($loan->status == 'dikembalikan')
+                                        <small class="text-info">Permintaan pengembalian sudah dikirim. Menunggu bukti foto dari petugas.</small>
                                     @elseif($loan->status == 'kembali')
                                         <small class="text-success">Diterima tanggal {{ $loan->tanggal_kembali_aktual }}</small>
                                         @if($loan->fines->where('status', 'pending')->count() > 0)

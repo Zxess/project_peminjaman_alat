@@ -79,5 +79,6 @@ Route::middleware(['auth', 'role:peminjam'])->group(function () {
     Route::get('/peminjam/dashboard', [PeminjamController::class, 'index'])->name('peminjam.dashboard'); // Daftar Alat 
     Route::post('/peminjam/ajukan', [PeminjamController::class, 'store'])->name('peminjam.store'); // Mengajukan 
     Route::get('/peminjam/riwayat', [PeminjamController::class, 'history'])->name('peminjam.riwayat'); // Riwayat & Kembalikan 
+    Route::post('/peminjam/return/{id}', [PeminjamController::class, 'requestReturn'])->name('peminjam.return'); // Pengembalian oleh peminjam 
     Route::get('/peminjam/denda', [PeminjamController::class, 'fines'])->name('peminjam.denda'); // Denda Saya
 });

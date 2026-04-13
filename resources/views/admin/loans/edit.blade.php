@@ -53,7 +53,7 @@
                 </div> 
             </div> 
 
-            <!-- Status -->
+            {{-- <!-- Status -->
             <div class="mb-3"> 
                 <label class="form-label fw-semibold">Status</label> 
                 <select name="status" class="form-select"> 
@@ -61,11 +61,11 @@
                     <option value="disetujui" {{ old('status', $loan->status) == 'disetujui' ? 'selected' : '' }}>Disetujui</option> 
                     <option value="kembali" {{ old('status', $loan->status) == 'kembali' ? 'selected' : '' }}>Kembali</option> 
                     <option value="ditolak" {{ old('status', $loan->status) == 'ditolak' ? 'selected' : '' }}>Ditolak</option> 
-                </select> 
+                </select>  --}}
 
-                <small class="text-danger">
+                {{-- <small class="text-danger">
                     *Jika status diubah ke <b>Kembali</b>, stok alat akan otomatis bertambah.
-                </small> 
+                </small>  --}}
             </div> 
 
             <!-- Tombol -->

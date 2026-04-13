@@ -69,6 +69,23 @@ class PeminjamController extends Controller
         return view('peminjam.riwayat', compact('loans', 'pendingFines', 'totalPendingFine', 'overdueLoans')); 
     }
 
+    public function requestReturn($id)
+    {
+        $loan = Loan::where('id', $id)
+                    ->where('user_id', Auth::id())
+                    ->where('status', 'disetujui')
+                    ->firstOrFail();
+
+        $loan->update([
+            'status' => 'dikembalikan',
+            'tanggal_kembali_aktual' => now(),
+        ]);
+
+        ActivityLog::record('Pengembalian Diajukkan', 'Pengembalian alat diajukan oleh peminjam: ' . $loan->tool->nama_alat);
+
+        return back()->with('success', 'Pengajuan pengembalian berhasil dikirim. Petugas akan mengupload bukti foto.');
+    }
+
     public function fines() {
         $fines = Fine::whereHas('loan', function($query) {
             $query->where('user_id', Auth::id());

@@ -88,6 +88,7 @@
                                 <th>Tgl Pinjam</th>
                                 <th>Tgl Kembali</th>
                                 <th>Denda</th>
+                                <th>Bukti Foto</th>
                                 <th>Petugas</th>
                                 <th width="150">Aksi</th>
                             </tr>
@@ -154,6 +155,15 @@
                                         </span>
                                     @else
                                         <span class="badge bg-success">Rp 0</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($r->return_photo_path)
+                                        <a href="{{ asset('storage/' . $r->return_photo_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-image me-1"></i> Lihat
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Tidak ada bukti</span>
                                     @endif
                                 </td>
                                 <td>

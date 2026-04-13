@@ -14,6 +14,7 @@ class PetugasController extends Controller
  
         $loans = Loan::where('status', 'pending')->with(['user', 'tool'])->get();  
         $activeLoans = Loan::where('status', 'disetujui')->with(['user', 'tool'])->get(); 
+        $returnRequests = Loan::where('status', 'dikembalikan')->with(['user', 'tool'])->get(); 
         $sudahDikembalikan = Loan::where('status', 'kembali')->with(['user', 'tool'])->get();    
         
         // Check for overdue loans
@@ -22,11 +23,7 @@ class PetugasController extends Controller
                            ->with(['user', 'tool'])
                            ->get();
         
-        return view('petugas.dashboard', compact('loans', 'activeLoans', 'sudahDikembalikan', 'overdueLoans')); 
-    } 
- 
-    public function approve($id) { 
-        $loan = Loan::findOrFail($id); 
+        return view('petugas.dashboard', compact('loans', 'activeLoans', 'returnRequests', 'sudahDikembalikan', 'overdueLoans')); 
         $loan->update([ 
             'status' => 'disetujui', 
             'petugas_id' => Auth::id() 
@@ -51,18 +48,34 @@ class PetugasController extends Controller
         return back()->with('success', 'Peminjaman telah ditolak.');
     }
 
-    public function processReturn($id) { 
+    public function processReturn(Request $request, $id) { 
         $loan = Loan::findOrFail($id); 
 
-        if ($loan->status !== 'disetujui') {
+        if (!in_array($loan->status, ['disetujui', 'dikembalikan'])) {
             return back()->with('error', 'Status peminjaman tidak valid untuk pengembalian.');
         }
 
-        $loan->update([ 
+        if ($loan->status === 'dikembalikan') {
+            $request->validate([
+                'return_photo' => 'required|image|max:2048',
+            ]);
+        } elseif ($request->hasFile('return_photo')) {
+            $request->validate([
+                'return_photo' => 'image|max:2048',
+            ]);
+        }
+
+        $data = [
             'status' => 'kembali', 
             'tanggal_kembali_aktual' => now(),
-            'petugas_id' => Auth::id() 
-        ]); 
+            'petugas_id' => Auth::id(), 
+        ];
+
+        if ($request->hasFile('return_photo')) {
+            $data['return_photo_path'] = $request->file('return_photo')->store('return_photos', 'public');
+        }
+
+        $loan->update($data); 
         $tool = Tool::find($loan->tool_id); 
         $tool->increment('stok'); 
 
@@ -77,7 +90,7 @@ class PetugasController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Alat telah dikembalikan.'); 
+        return back()->with('success', 'Pengembalian berhasil diproses.'); 
     } 
  
     public function report(Request $request) {  
