@@ -33,6 +33,30 @@ class Loan extends Model
         return $this->fines()->where('status', 'pending')->sum('amount');
     }
 
+    public function getLateDurationAttribute()
+    {
+        $dueDate = Carbon::parse($this->tanggal_kembali_rencana);
+        $compareDate = $this->tanggal_kembali_aktual ? Carbon::parse($this->tanggal_kembali_aktual) : Carbon::now();
+
+        if ($compareDate->lte($dueDate)) {
+            return null;
+        }
+
+        $daysLate = $dueDate->diffInDays($compareDate);
+
+        if ($daysLate < 30) {
+            return $daysLate . ' hari';
+        }
+
+        if ($daysLate < 365) {
+            $monthsLate = intdiv($daysLate, 30);
+            return $monthsLate . ' bulan';
+        }
+
+        $yearsLate = intdiv($daysLate, 365);
+        return $yearsLate . ' tahun';
+    }
+
     public function getReturnPhotoUrlAttribute()
     {
         return $this->return_photo_path ? asset('storage/' . $this->return_photo_path) : null;

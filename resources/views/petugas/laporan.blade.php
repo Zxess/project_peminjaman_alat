@@ -476,12 +476,10 @@
                             <td class="text-center">
                                 @if($isOverdue || ($loan->tanggal_kembali_aktual && \Carbon\Carbon::parse($loan->tanggal_kembali_aktual)->gt(\Carbon\Carbon::parse($loan->tanggal_kembali_rencana))))
                                     @php
-                                        $returnDate = $loan->tanggal_kembali_aktual ? \Carbon\Carbon::parse($loan->tanggal_kembali_aktual) : now();
-                                        $plannedDate = \Carbon\Carbon::parse($loan->tanggal_kembali_rencana);
-                                        $lateDays = $returnDate->diffInDays($plannedDate);
+                                        $lateDuration = $loan->late_duration;
                                     @endphp
                                     <span style="color:#cc0000; font-size:11px;">
-                                        Telat {{ $lateDays }} hari
+                                        Telat {{ $lateDuration ?? '0 hari' }}
                                     </span>
                                 @elseif($loan->status == 'kembali')
                                     <span style="color:#333; font-size:11px;">Tepat waktu</span>

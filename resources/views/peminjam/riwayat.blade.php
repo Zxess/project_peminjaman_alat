@@ -139,7 +139,7 @@
                                     {{ $loan->tanggal_kembali_rencana }}
                                     @if($isOverdue)
                                         <br><small class="text-warning fw-semibold">
-                                            Terlambat: {{ \Carbon\Carbon::parse($loan->tanggal_kembali_rencana)->diffInDays(now()) }} hari
+                                            Terlambat: {{ $loan->late_duration ?? '0 hari' }}
                                         </small>
                                     @endif
                                 </td>
@@ -161,23 +161,39 @@
                                 </td>
                                 <td>
                                     @if($loan->status == 'disetujui')
-                                        <form action="{{ route('peminjam.return', $loan->id) }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-sm btn-outline-success">Ajukan Pengembalian</button>
-                                        </form>
-                                        <small class="text-muted d-block mt-2">Harap kembalikan ke petugas sebelum tanggal rencana.</small>
+                                        <div class="mb-3">
+                                            <form action="{{ route('peminjam.return', $loan->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-check me-1"></i>Ajukan Pengembalian
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <small class="text-muted">Harap kembalikan ke petugas sebelum tanggal rencana.</small>
                                     @elseif($loan->status == 'dikembalikan')
-                                        <small class="text-info">Permintaan pengembalian sudah dikirim. Menunggu bukti foto dari petugas.</small>
+                                        <span class="badge bg-info">
+                                            <i class="fas fa-hourglass-end me-1"></i>Menunggu Verifikasi
+                                        </span>
+                                        <br><small class="text-info mt-2 d-block">Permintaan pengembalian sudah dikirim. Petugas akan mengupload bukti foto segera.</small>
                                     @elseif($loan->status == 'kembali')
-                                        <small class="text-success">Diterima tanggal {{ $loan->tanggal_kembali_aktual }}</small>
+                                        <span class="badge bg-success mb-2 d-block">
+                                            <i class="fas fa-check-circle me-1"></i>Pengembalian Disetujui
+                                        </span>
+                                        <small class="text-success">Diterima tanggal {{ \Carbon\Carbon::parse($loan->tanggal_kembali_aktual)->format('d/m/Y') }}</small>
+                                        @if($loan->return_photo_path)
+                                            <br><a href="{{ asset('storage/' . $loan->return_photo_path) }}" target="_blank" class="btn btn-link btn-sm mt-1">
+                                                <i class="fas fa-image me-1"></i>Lihat Bukti Foto
+                                            </a>
+                                        @endif
                                         @if($loan->fines->where('status', 'pending')->count() > 0)
-                                            <br><small class="text-danger fw-semibold">
+                                            <br><small class="text-danger fw-semibold mt-2 d-block">
                                                 <i class="fas fa-exclamation-triangle me-1"></i>
                                                 Denda: Rp {{ number_format($loan->fines->where('status', 'pending')->sum('amount')) }}
                                             </small>
                                         @endif
                                     @elseif($loan->status == 'ditolak')
-                                        <small class="text-danger">Persyaratan belum memenuhi</small>
+                                        <span class="badge bg-danger">Permintaan Ditolak</span>
+                                        <br><small class="text-danger mt-2 d-block">Persyaratan belum memenuhi</small>
                                     @endif
                                 </td>
                             </tr>

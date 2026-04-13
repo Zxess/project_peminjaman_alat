@@ -136,10 +136,10 @@
                                         </div>
                                         @if($r->tanggal_kembali_aktual > $r->tanggal_kembali_rencana)
                                             @php
-                                                $lateDays = \Carbon\Carbon::parse($r->tanggal_kembali_aktual)->diffInDays(\Carbon\Carbon::parse($r->tanggal_kembali_rencana));
+                                                $lateDuration = $r->late_duration;
                                             @endphp
                                             <span class="status-badge status-late">
-                                                <i class="fas fa-clock me-1"></i>Terlambat {{ $lateDays }} hari
+                                                <i class="fas fa-clock me-1"></i>Terlambat {{ $lateDuration ?? '0 hari' }}
                                             </span>
                                         @else
                                             <span class="status-badge status-ontime">
@@ -159,9 +159,33 @@
                                 </td>
                                 <td>
                                     @if($r->return_photo_path)
-                                        <a href="{{ asset('storage/' . $r->return_photo_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-image me-1"></i> Lihat
-                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#photoModal{{ $r->id }}">
+                                            <i class="fas fa-image me-1"></i> Lihat Foto
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="photoModal{{ $r->id }}" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Bukti Pengembalian Alat</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <div class="mb-3">
+                                                            <strong>{{ $r->tool->nama_alat }}</strong>
+                                                            <br>
+                                                            <small class="text-muted">{{ $r->user->name }}</small>
+                                                        </div>
+                                                        <img src="{{ asset('storage/' . $r->return_photo_path) }}" alt="Bukti Foto" class="img-fluid" style="max-height: 600px; border-radius: 8px;">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($r->tanggal_kembali_aktual)->format('d/m/Y H:i') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="text-muted">Tidak ada bukti</span>
                                     @endif

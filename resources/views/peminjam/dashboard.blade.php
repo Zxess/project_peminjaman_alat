@@ -31,9 +31,40 @@
         <br><small>Mohon segera kembalikan alat ke petugas untuk menghindari denda tambahan.</small>
         <div class="mt-2">
             <a href="{{ route('peminjam.riwayat') }}" class="btn btn-warning btn-sm">
-                <i class="fas fa-eye me-1"></i> Lihat Riwayat
+                <i class="fas fa-eye me-1"></i> Lihat Riwayat & Kembalikan
             </a>
         </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    {{-- Pengembalian Alert/Info --}}
+    @php
+        $activeLoans = \App\Models\Loan::where('user_id', auth()->id())
+                                       ->where('status', 'disetujui')
+                                       ->with('tool')
+                                       ->get();
+        $pendingReturns = \App\Models\Loan::where('user_id', auth()->id())
+                                          ->where('status', 'dikembalikan')
+                                          ->with('tool')
+                                          ->get();
+    @endphp
+
+    @if($activeLoans->count() > 0)
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Catatan:</strong> Anda memiliki {{ $activeLoans->count() }} alat yang sedang dipinjam. 
+        <br><small>Kunjungi halaman <a href="{{ route('peminjam.riwayat') }}" class="alert-link">Riwayat Peminjaman</a> untuk mengajukan pengembalian.</small>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if($pendingReturns->count() > 0)
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-hourglass-end me-2"></i>
+        <strong>Status Pengembalian:</strong> 
+        <br>{{ $pendingReturns->count() }} permintaan pengembalian sedang menunggu verifikasi petugas.
+        <br><small>Petugas akan mengupload bukti foto pengembalian alat Anda.</small>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif

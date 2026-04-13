@@ -264,6 +264,8 @@
                             <tr>
                                 <th>Peminjam</th>
                                 <th>Alat</th>
+                                <th>Tgl Pengembalian</th>
+                                <th>Bukti Foto</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -275,6 +277,35 @@
                                     <span class="badge-role badge-user">{{ ucfirst($sudah->user->role) }}</span>
                                 </td>
                                 <td>{{ $sudah->tool->nama_alat }}</td>
+                                <td>{{ \Carbon\Carbon::parse($sudah->tanggal_kembali_aktual)->format('d/m/Y') }}</td>
+                                <td>
+                                    @if($sudah->return_photo_path)
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#photoModal{{ $sudah->id }}">
+                                            <i class="fas fa-image me-1"></i> Lihat Foto
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="photoModal{{ $sudah->id }}" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Bukti Pengembalian - {{ $sudah->tool->nama_alat }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <img src="{{ asset('storage/' . $sudah->return_photo_path) }}" alt="Bukti Foto" class="img-fluid" style="max-height: 500px;">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($sudah->tanggal_kembali_aktual)->format('d/m/Y H:i') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
                                 <td><span class="action-badge action-login">{{ $sudah->status }}</span></td>
                             </tr>
                             @endforeach
