@@ -2,198 +2,359 @@
 
 @section('content')
 <div class="dashboard-container">
-    {{-- Welcome Header --}}
+
     <div class="welcome-header">
         <h3>
             <i class="fas fa-money-bill-wave me-2" style="color: #3b82f6;"></i>
-            Denda Saya
+            Manajemen Denda
         </h3>
-        <p><strong>{{ auth()->user()->name }}</strong>, lihat status denda peminjaman alat Anda.</p>
+        <p>Kelola denda dan pembayaran keterlambatan pengembalian alat.</p>
     </div>
 
-    {{-- Stats Row --}}
-    <div class="row stats-row">
-        <div class="col-md-4">
-            <div class="stat-card stat-card-danger">
-                <div class="stat-card-header">
-                    <i class="fas fa-clock me-2"></i> Denda Pending
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
                 </div>
-                <div class="stat-card-body">
-                    <div class="stat-number">{{ $pendingFines->count() }}</div>
-                    <div class="stat-text">Belum Dibayar</div>
-                </div>
-                <div class="stat-card-footer">
-                    <span class="text-muted">Rp {{ number_format($totalPendingAmount) }}</span>
-                    <span class="arrow-icon"><i class="fas fa-arrow-right"></i></span>
+                <div class="stat-content">
+                    <h4>{{ $fines->where('status', 'pending')->count() }}</h4>
+                    <p>Denda Pending</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="stat-card stat-card-success">
-                <div class="stat-card-header">
-                    <i class="fas fa-check-circle me-2"></i> Denda Dibayar
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                <div class="stat-card-body">
-                    <div class="stat-number">{{ $paidFines->count() }}</div>
-                    <div class="stat-text">Sudah Lunas</div>
-                </div>
-                <div class="stat-card-footer">
-                    <span class="text-muted">Rp {{ number_format($totalPaidAmount) }}</span>
-                    <span class="arrow-icon"><i class="fas fa-arrow-right"></i></span>
+                <div class="stat-content">
+                    <h4>{{ $fines->where('status', 'paid')->count() }}</h4>
+                    <p>Denda Dibayar</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="stat-card stat-card-info">
-                <div class="stat-card-header">
-                    <i class="fas fa-coins me-2"></i> Total Denda
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
                 </div>
-                <div class="stat-card-body">
-                    <div class="stat-number">{{ $fines->count() }}</div>
-                    <div class="stat-text">Semua Transaksi</div>
+                <div class="stat-content">
+                    <h4>Rp {{ number_format($fines->where('status', 'pending')->sum('amount'), 0, ',', '.') }}</h4>
+                    <p>Total Pending</p>
                 </div>
-                <div class="stat-card-footer">
-                    <span class="text-muted">Rp {{ number_format($totalPendingAmount + $totalPaidAmount) }}</span>
-                    <span class="arrow-icon"><i class="fas fa-arrow-right"></i></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-content">
+                    <h4>Rp {{ number_format($fines->where('status', 'paid')->sum('amount'), 0, ',', '.') }}</h4>
+                    <p>Total Dibayar</p>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- Important Notice --}}
-    @if($totalPendingAmount > 0)
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        <strong>PENTING!</strong> Anda memiliki denda yang belum dibayar sebesar
-        <strong>Rp {{ number_format($totalPendingAmount) }}</strong>.
-        <br><small>Silakan hubungi administrator untuk informasi pembayaran denda.</small>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-
-    {{-- Fines Table --}}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="activity-card">
-                <div class="activity-header">
-                    <i class="fas fa-list"></i>
-                    <h5>Riwayat Denda</h5>
-                </div>
-
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Daftar Denda</h4>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-modern">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Alat</th>
-                                <th>Jumlah Denda</th>
+                                <th>ID</th>
+                                <th>Peminjam</th>
+                                <th>Denda</th>
                                 <th>Status</th>
-                                <th>Tanggal Dibuat</th>
-                                <th>Tanggal Bayar</th>
-                                <th>Alasan</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            @forelse($fines as $key => $fine)
-                            <tr class="{{ $fine->status === 'pending' ? 'table-danger' : 'table-success' }}">
-                                <td class="text-center fw-semibold">
-                                    {{ $fines->firstItem() + $key }}
-                                </td>
-
+                            @forelse($fines as $fine)
+                            <tr>
+                                <td>{{ $fine->id }}</td>
+                                <td>{{ $fine->loan->user->name ?? '-' }}</td>
+                                <td>Rp {{ number_format($fine->amount, 0, ',', '.') }}</td>
                                 <td>
-                                    <div class="fw-semibold">{{ $fine->loan->tool->nama_alat ?? '-' }}</div>
-                                    <span class="badge-role badge-user">{{ $fine->loan->tool->category->nama_kategori ?? '-' }}</span>
-                                </td>
-
-                                <td>
-                                    <span class="fw-semibold text-danger">Rp {{ number_format($fine->amount) }}</span>
-                                </td>
-
-                                <td>
-                                    @if($fine->status === 'pending')
-                                        <span class="action-badge action-delete">
-                                            <i class="fas fa-clock me-1"></i>Belum Dibayar
-                                        </span>
+                                    @if($fine->status == 'pending')
+                                        <span class="badge bg-warning">Pending</span>
                                     @else
-                                        <span class="action-badge action-login">
-                                            <i class="fas fa-check-circle me-1"></i>Sudah Dibayar
-                                        </span>
+                                        <span class="badge bg-success">Success</span>
                                     @endif
                                 </td>
-
                                 <td>
-                                    {{ \Carbon\Carbon::parse($fine->created_at)->format('d M Y') }}
-                                    <br><small class="text-muted">{{ \Carbon\Carbon::parse($fine->created_at)->format('H:i') }}</small>
-                                </td>
-
-                                <td>
-                                    @if($fine->payment_date)
-                                        {{ \Carbon\Carbon::parse($fine->payment_date)->format('d M Y') }}
-                                        <br><small class="text-muted">{{ \Carbon\Carbon::parse($fine->payment_date)->format('H:i') }}</small>
+                                    @if($fine->status == 'pending')
+                                        <button class="btn btn-success btn-sm" onclick="bayar({{ $fine->id }})">
+                                            <i class="fas fa-credit-card"></i> BAYAR
+                                        </button>
                                     @else
-                                        <span class="text-muted">-</span>
+                                        <button class="btn btn-secondary btn-sm" disabled>
+                                            <i class="fas fa-check"></i> Lunas
+                                        </button>
                                     @endif
-                                </td>
-
-                                <td>
-                                    <small>{{ $fine->reason }}</small>
                                 </td>
                             </tr>
-
                             @empty
                             <tr>
-                                <td colspan="7" class="empty-state">
-                                    <i class="fas fa-check-circle"></i>
-                                    <div>Bagus! Anda tidak memiliki denda.</div>
-                                    <small class="text-muted">Pastikan selalu mengembalikan alat tepat waktu.</small>
-                                </td>
+                                <td colspan="5" class="text-center">Tidak ada data denda</td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-
-                <div class="activity-footer">
-                    {{ $fines->links('pagination::bootstrap-5') }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Payment Instructions --}}
-    @if($totalPendingAmount > 0)
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="activity-card">
-                <div class="activity-header">
-                    <i class="fas fa-info-circle"></i>
-                    <h5>Cara Pembayaran Denda</h5>
-                </div>
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6><i class="fas fa-credit-card text-primary me-2"></i>Metode Pembayaran</h6>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-check text-success me-2"></i>Tunai</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Transfer Bank</li>
-                                <li><i class="fas fa-check text-success me-2"></i>E-Wallet</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6><i class="fas fa-user-tie text-primary me-2"></i>Hubungi Administrator</h6>
-                            <p class="mb-1">Untuk informasi lebih lanjut tentang pembayaran denda, silakan hubungi:</p>
-                            <p class="mb-0"><strong>Administrator Sistem</strong></p>
-                            <small class="text-muted">Pastikan membawa bukti identitas saat melakukan pembayaran.</small>
-                        </div>
+                
+                @if(method_exists($fines, 'links'))
+                    <div class="mt-3">
+                        {{ $fines->links() }}
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
-    @endif
 </div>
+
+<!-- Load libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+console.log('✅ Page loaded');
+
+let paymentCheckInterval = null;
+let currentOrderId = null;
+
+function bayar(fineId) {
+    console.log('🔵 Bayar dipanggil untuk fineId:', fineId);
+    
+    Swal.fire({
+        title: 'Memproses...',
+        text: 'Menyiapkan pembayaran',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
+    
+    fetch('{{ route("fines.payment.create") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ fine_id: fineId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response dari server:', data);
+        Swal.close();
+        
+        if (data.snap_token) {
+            currentOrderId = data.order_id;
+            
+            window.snap.pay(data.snap_token, {
+                onSuccess: function(result) {
+                    console.log('✅ Pembayaran Sukses:', result);
+                    // Langsung update status setelah sukses
+                    updateFineStatus(fineId, result);
+                },
+                onError: function(result) {
+                    console.log('❌ Pembayaran Error:', result);
+                    Swal.fire('Gagal!', 'Pembayaran gagal. Silakan coba lagi.', 'error');
+                },
+                onPending: function(result) {
+                    console.log('⏳ Pembayaran Pending:', result);
+                    // Untuk VA, status pending, cek secara berkala
+                    startPollingStatus(fineId, data.order_id);
+                },
+                onClose: function() {
+                    console.log('Popup ditutup');
+                    Swal.fire('Info', 'Pembayaran dibatalkan', 'info');
+                }
+            });
+        } else {
+            throw new Error(data.message || 'Snap token tidak ditemukan');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Error:', error);
+        Swal.close();
+        Swal.fire('Error!', error.message, 'error');
+    });
+}
+
+// Fungsi update status setelah pembayaran sukses
+function updateFineStatus(fineId, paymentResult) {
+    Swal.fire({
+        title: 'Memperbarui Status...',
+        text: 'Mohon tunggu',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
+    
+    fetch(`/fines/${fineId}/update-status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            transaction_id: paymentResult.transaction_id,
+            order_id: paymentResult.order_id,
+            payment_type: paymentResult.payment_type,
+            gross_amount: paymentResult.gross_amount,
+            payment_method: paymentResult.payment_type || 'midtrans',
+            status: 'paid'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.close();
+        
+        if (data.success) {
+            Swal.fire('✅ Berhasil!', 'Status denda telah diperbarui menjadi Dibayar.', 'success')
+                .then(() => location.reload());
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.close();
+        Swal.fire('⚠️ Peringatan', 'Gagal update status, silakan refresh manual.', 'warning')
+            .then(() => location.reload());
+    });
+}
+
+// Polling status untuk pembayaran Virtual Account
+function startPollingStatus(fineId, orderId) {
+    let attempts = 0;
+    const maxAttempts = 20; // 20 x 3 detik = 60 detik
+    
+    Swal.fire({
+        title: 'Menunggu Pembayaran',
+        html: 'Silakan selesaikan pembayaran Anda.<br>Status akan otomatis diperbarui.',
+        icon: 'info',
+        confirmButtonText: 'Cek Sekarang',
+        showCancelButton: true,
+        cancelButtonText: 'Tutup',
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Manual check
+            checkStatusViaMidtrans(fineId, orderId);
+        }
+    });
+    
+    // Auto polling setiap 3 detik
+    if (paymentCheckInterval) clearInterval(paymentCheckInterval);
+    
+    paymentCheckInterval = setInterval(() => {
+        attempts++;
+        console.log(`🔄 Polling ke-${attempts} untuk order: ${orderId}`);
+        
+        // Cek status ke database dulu
+        fetch(`/fines/${fineId}/check-status`, {
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'paid') {
+                clearInterval(paymentCheckInterval);
+                Swal.close();
+                Swal.fire('✅ Sukses!', 'Pembayaran telah dikonfirmasi!', 'success')
+                    .then(() => location.reload());
+            } else if (attempts >= maxAttempts) {
+                clearInterval(paymentCheckInterval);
+                Swal.fire('Info', 'Silakan refresh halaman untuk cek status terbaru.', 'info');
+            }
+        })
+        .catch(err => console.error('Polling error:', err));
+    }, 3000);
+}
+
+// Cek status langsung ke Midtrans API
+function checkStatusViaMidtrans(fineId, orderId) {
+    Swal.fire({
+        title: 'Mengecek Status...',
+        text: 'Menghubungi server pembayaran',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
+    
+    fetch('/fines/check-midtrans-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            fine_id: fineId,
+            order_id: orderId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.close();
+        
+        if (data.success) {
+            Swal.fire('✅ Berhasil!', 'Pembayaran terkonfirmasi!', 'success')
+                .then(() => location.reload());
+        } else {
+            Swal.fire('⏳ Pending', data.message || 'Pembayaran belum terkonfirmasi', 'info');
+        }
+    })
+    .catch(error => {
+        Swal.close();
+        Swal.fire('Error', 'Gagal mengecek status', 'error');
+    });
+}
+
+// Cleanup
+window.addEventListener('beforeunload', () => {
+    if (paymentCheckInterval) clearInterval(paymentCheckInterval);
+});
+</script>
+
+<style>
+.btn-success {
+    background-color: #10b981;
+    border-color: #10b981;
+    transition: all 0.3s ease;
+}
+.btn-success:hover {
+    background-color: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
+}
+.badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+</style>
 @endsection

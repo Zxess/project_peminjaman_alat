@@ -149,7 +149,7 @@
                                 <th>Peminjam</th>
                                 <th>Alat</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                {{-- <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -174,17 +174,17 @@
                                         <br><small class="text-danger">Batas: {{ $active->tanggal_kembali_rencana }}</small>
                                     @endif
                                 </td>
-                                <td>
-                                    <form action="{{ url('/petugas/return/'.$active->id) }}" method="POST">
+                                {{-- <td>
+                                    {{-- <form action="{{ url('/petugas/return/'.$active->id) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-primary btn-sm {{ $isOverdue ? 'btn-danger' : '' }}">
                                             @if($isOverdue)
                                                 <i class="fas fa-exclamation-triangle me-1"></i>
                                             @endif
                                             Proses Pengembalian
-                                        </button>
+                                        </button> 
                                     </form>
-                                </td>
+                                </td> --}}
                             </tr>
                             @endforeach
                         </tbody>

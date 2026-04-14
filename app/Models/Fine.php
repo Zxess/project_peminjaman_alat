@@ -10,15 +10,13 @@ class Fine extends Model
         'loan_id',
         'amount',
         'status',
-        'payment_date',
-        'reason'
+        'reason',
+        'order_id',        // Tambahkan ini
+        'payment_method',  // Tambahkan ini
+        'payment_date'     // Tambahkan ini
     ];
 
-    protected $casts = [
-        'payment_date' => 'datetime',
-        'amount' => 'decimal:2'
-    ];
-
+    // Relasi ke Loan
     public function loan()
     {
         return $this->belongsTo(Loan::class);

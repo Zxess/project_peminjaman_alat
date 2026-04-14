@@ -1,17 +1,16 @@
-<?php 
- 
-namespace App\Http\Controllers; 
- 
-use App\Models\Loan; 
-use App\Models\Tool; 
-use App\Models\Fine; 
-use Illuminate\Http\Request; 
-use Illuminate\Support\Facades\Auth; 
- 
-class PetugasController extends Controller 
-{ 
-    public function index() { 
- 
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Loan;
+use App\Models\Tool;
+use App\Models\Fine;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class PetugasController extends Controller
+{
+    public function index() {
         $loans = Loan::where('status', 'pending')->with(['user', 'tool'])->get();  
         $activeLoans = Loan::where('status', 'disetujui')->with(['user', 'tool'])->get(); 
         $returnRequests = Loan::where('status', 'dikembalikan')->with(['user', 'tool'])->get(); 
@@ -24,14 +23,30 @@ class PetugasController extends Controller
                            ->get();
         
         return view('petugas.dashboard', compact('loans', 'activeLoans', 'returnRequests', 'sudahDikembalikan', 'overdueLoans')); 
+    }
+
+    // ✅ TAMBAHKAN METHOD INI UNTUK APPROVE/ MENYETUJUI
+    public function approve($id)
+    {
+        $loan = Loan::findOrFail($id);
+
+        // Cek apakah status masih pending
+        if ($loan->status !== 'pending') {
+            return back()->with('error', 'Hanya permintaan yang statusnya "pending" bisa disetujui.');
+        }
+
+        // Update status menjadi disetujui
         $loan->update([ 
             'status' => 'disetujui', 
             'petugas_id' => Auth::id() 
-        ]);  
+        ]);
+
+        // Kurangi stok alat
         $tool = Tool::find($loan->tool_id); 
         $tool->decrement('stok');          
-        return back()->with('success', 'Peminjaman disetujui.'); 
-    } 
+
+        return back()->with('success', 'Peminjaman berhasil disetujui.');
+    }
 
     public function reject($id) {
         $loan = Loan::findOrFail($id);
@@ -92,9 +107,9 @@ class PetugasController extends Controller
 
         return back()->with('success', 'Pengembalian berhasil diproses.'); 
     } 
- 
+
     public function report(Request $request) {  
         $loans = Loan::with(['user', 'tool'])->orderBy('created_at', 'desc')->get(); 
         return view('petugas.laporan', compact('loans')); 
     } 
-} 
+}

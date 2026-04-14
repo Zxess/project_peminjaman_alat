@@ -91,7 +91,6 @@ dibuat.');
             'tool_id' => $request->tool_id, 
             'tanggal_pinjam' => $request->tanggal_pinjam, 
             'tanggal_kembali_rencana' => $request->tanggal_kembali_rencana, 
-            'status' => $request->status, 
             'tanggal_kembali_aktual' => $request->tanggal_kembali_aktual ?? $loan->tanggal_kembali_aktual 
         ]); 
  
