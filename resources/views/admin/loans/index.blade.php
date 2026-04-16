@@ -64,7 +64,7 @@
                                     <small class="text-muted">Kembali: {{ $loan->tanggal_kembali_rencana }}</small>
                                     @if($isOverdue)
                                         <br><small class="text-danger fw-semibold">
-                                            Terlambat: {{ \Carbon\Carbon::parse($loan->tanggal_kembali_rencana)->diffForHumans() }}
+                                            Terlambat: {{ \Carbon\Carbon::parse($loan->tanggal_kembali_rencana)->diffInDays(now()) }} hari
                                         </small>
                                     @endif
                                 </td>

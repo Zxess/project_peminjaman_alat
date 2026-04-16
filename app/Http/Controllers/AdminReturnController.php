@@ -12,12 +12,20 @@ class AdminReturnController extends Controller
 { 
     public function index() 
     { 
-        $returns = Loan::with(['user', 'tool']) 
+        $returns = Loan::with(['user', 'tool', 'fines']) 
                     ->where('status', 'kembali') 
                     ->latest('tanggal_kembali_aktual') 
                     ->paginate(10); 
  
-        return view('admin.returns.index', compact('returns')); 
+        $totalReturns = Loan::where('status', 'kembali')->count(); 
+        $onTime = Loan::where('status', 'kembali') 
+                      ->whereColumn('tanggal_kembali_aktual', '<=', 'tanggal_kembali_rencana') 
+                      ->count(); 
+        $late = Loan::where('status', 'kembali') 
+                    ->whereColumn('tanggal_kembali_aktual', '>', 'tanggal_kembali_rencana') 
+                    ->count(); 
+ 
+        return view('admin.returns.index', compact('returns', 'totalReturns', 'onTime', 'late')); 
     } 
  
     public function create() 

@@ -19,7 +19,7 @@
                     <i class="fas fa-sign-in-alt me-2"></i> Login
                 </div>
                 <div class="stat-card-body">
-                    <div class="stat-number">{{ $logs->where('action', 'login')->count() }}</div>
+                    <div class="stat-number">{{ $stats['login'] }}</div>
                     <div class="stat-text">Aktivitas Login</div>
                 </div>
                 <div class="stat-card-footer">
@@ -35,7 +35,7 @@
                     <i class="fas fa-plus me-2"></i> Create
                 </div>
                 <div class="stat-card-body">
-                    <div class="stat-number">{{ $logs->where('action', 'create')->orWhere('action', 'tambah')->count() }}</div>
+                    <div class="stat-number">{{ $stats['create'] }}</div>
                     <div class="stat-text">Data Ditambah</div>
                 </div>
                 <div class="stat-card-footer">
@@ -51,7 +51,7 @@
                     <i class="fas fa-edit me-2"></i> Update
                 </div>
                 <div class="stat-card-body">
-                    <div class="stat-number">{{ $logs->where('action', 'update')->orWhere('action', 'edit')->count() }}</div>
+                    <div class="stat-number">{{ $stats['update'] }}</div>
                     <div class="stat-text">Data Diubah</div>
                 </div>
                 <div class="stat-card-footer">
@@ -67,7 +67,7 @@
                     <i class="fas fa-trash me-2"></i> Delete
                 </div>
                 <div class="stat-card-body">
-                    <div class="stat-number">{{ $logs->where('action', 'delete')->orWhere('action', 'hapus')->count() }}</div>
+                    <div class="stat-number">{{ $stats['delete'] }}</div>
                     <div class="stat-text">Data Dihapus</div>
                 </div>
                 <div class="stat-card-footer">
@@ -107,9 +107,9 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="fw-semibold" style="font-size: 13px;">{{ $log->user->name }}</div>
-                                    <span class="badge-role {{ $log->user->role == 'admin' ? 'badge-admin' : 'badge-user' }}">
-                                        {{ ucfirst($log->user->role) }}
+                                    <div class="fw-semibold" style="font-size: 13px;">{{ $log->user ? $log->user->name : 'User Dihapus' }}</div>
+                                    <span class="badge-role {{ $log->user && $log->user->role == 'admin' ? 'badge-admin' : 'badge-user' }}">
+                                        {{ $log->user ? ucfirst($log->user->role) : 'Unknown' }}
                                     </span>
                                 </td>
                                 <td>

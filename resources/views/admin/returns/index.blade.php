@@ -26,7 +26,7 @@
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <div class="stat-info">
-                    <h4>{{ $returns->total() }}</h4>
+                    <h4>{{ $totalReturns }}</h4>
                     <p>Total Transaksi</p>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="stat-info">
-                    <h4>{{ $returns->where('tanggal_kembali_aktual', '<=', 'tanggal_kembali_rencana')->count() }}</h4>
+                    <h4>{{ $onTime }}</h4>
                     <p>Tepat Waktu</p>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <div class="stat-info">
-                    <h4>{{ $returns->where('tanggal_kembali_aktual', '>', 'tanggal_kembali_rencana')->count() }}</h4>
+                    <h4>{{ $late }}</h4>
                     <p>Terlambat</p>
                 </div>
             </div>
@@ -87,6 +87,7 @@
                                 <th>Alat</th>
                                 <th>Tgl Pinjam</th>
                                 <th>Tgl Kembali</th>
+                                <th>Denda</th>
                                 <th>Petugas</th>
                                 <th width="150">Aksi</th>
                             </tr>
@@ -147,6 +148,15 @@
                                     </div>
                                 </td>
                                 <td>
+                                    @if($r->fines->where('status', 'pending')->sum('amount') > 0)
+                                        <span class="badge bg-danger">
+                                            Rp {{ number_format($r->fines->where('status', 'pending')->sum('amount')) }}
+                                        </span>
+                                    @else
+                                        <span class="badge bg-success">Rp 0</span>
+                                    @endif
+                                </td>
+                                <td>
                                     <div class="officer-info">
                                         <div class="officer-avatar">
                                             <i class="fas fa-user-check"></i>
@@ -176,7 +186,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="empty-state">
+                                <td colspan="8" class="empty-state">
                                     <div class="empty-state-content">
                                         <i class="fas fa-inbox"></i>
                                         <h4>Belum Ada Data Pengembalian</h4>

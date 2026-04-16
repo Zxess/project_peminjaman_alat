@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Peminjaman Alat - Laboratorium</title> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style> 
         * {
             margin: 0;
@@ -387,11 +387,11 @@
         <div class="info-section">
             <div class="info-card">
                 <label><i class="fas fa-calendar-alt"></i> TANGGAL CETAK</label>
-                <div class="value">{{ date('d F Y') }}</div>
+                <div class="value">{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</div>
             </div>
             <div class="info-card">
                 <label><i class="fas fa-clock"></i> WAKTU CETAK</label>
-                <div class="value">{{ date('H:i:s') }}</div>
+                <div class="value">{{ \Carbon\Carbon::now()->format('H:i') }}</div>
             </div>
             <div class="info-card">
                 <label><i class="fas fa-chart-bar"></i> TOTAL TRANSAKSI</label>
@@ -409,12 +409,13 @@
                     <thead>
                         <tr>
                             <th width="5%">No</th>
-                            <th width="20%">Peminjam</th>
-                            <th width="25%">Alat</th>
-                            <th width="15%">Tgl Pinjam</th>
-                            <th width="15%">Tgl Kembali</th>
+                            <th width="18%">Peminjam</th>
+                            <th width="22%">Alat</th>
+                            <th width="11%">Tgl Pinjam</th>
+                            <th width="11%">Tgl Kembali Rencana</th>
+                            <th width="11%">Tgl Kembali Aktual</th>
                             <th width="10%">Status</th>
-                            <th width="10%">Keterangan</th>
+                            <th width="12%">Keterangan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -430,6 +431,7 @@
                                 <small style="color:#888;">{{ $loan->tool->category->nama_kategori ?? '-' }}</small>
                             </td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d/m/Y') }}</td>
+                            <td class="text-center">{{ \Carbon\Carbon::parse($loan->tanggal_kembali_rencana)->format('d/m/Y') }}</td>
                             <td class="text-center">
                                 @if($loan->tanggal_kembali_aktual)
                                     {{ \Carbon\Carbon::parse($loan->tanggal_kembali_aktual)->format('d/m/Y') }}
@@ -439,37 +441,49 @@
                             </td>
                             <td class="text-center">
                                 @php
+                                    $isOverdue = $loan->status == 'disetujui' && \Carbon\Carbon::parse($loan->tanggal_kembali_rencana)->isPast();
                                     $statusClass = '';
                                     $statusText = '';
-                                    switch($loan->status) {
-                                        case 'dipinjam':
-                                            $statusClass = 'status-dipinjam';
-                                            $statusText = 'DIPINJAM';
-                                            break;
-                                        case 'dikembalikan':
-                                            $statusClass = 'status-dikembalikan';
-                                            $statusText = 'DIKEMBALIKAN';
-                                            break;
-                                        case 'terlambat':
-                                            $statusClass = 'status-terlambat';
-                                            $statusText = 'TERLAMBAT';
-                                            break;
-                                        default:
-                                            $statusClass = 'status-menunggu';
-                                            $statusText = 'MENUNGGU';
+                                    if($isOverdue) {
+                                        $statusClass = 'status-terlambat';
+                                        $statusText = 'TERLAMBAT';
+                                    } else {
+                                        switch($loan->status) {
+                                            case 'pending':
+                                                $statusClass = 'status-menunggu';
+                                                $statusText = 'MENUNGGU';
+                                                break;
+                                            case 'disetujui':
+                                                $statusClass = 'status-dipinjam';
+                                                $statusText = 'DIPINJAM';
+                                                break;
+                                            case 'ditolak':
+                                                $statusClass = 'status-menunggu';
+                                                $statusText = 'DITOLAK';
+                                                break;
+                                            case 'kembali':
+                                                $statusClass = 'status-dikembalikan';
+                                                $statusText = 'DIKEMBALIKAN';
+                                                break;
+                                            default:
+                                                $statusClass = 'status-menunggu';
+                                                $statusText = 'MENUNGGU';
+                                        }
                                     }
                                 @endphp
                                 <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
                             </td>
                             <td class="text-center">
-                                @if($loan->status == 'terlambat' || ($loan->tanggal_kembali_aktual && $loan->tanggal_kembali_aktual > $loan->tanggal_kembali_rencana))
+                                @if($isOverdue || ($loan->tanggal_kembali_aktual && \Carbon\Carbon::parse($loan->tanggal_kembali_aktual)->gt(\Carbon\Carbon::parse($loan->tanggal_kembali_rencana))))
                                     @php
-                                        $lateDays = \Carbon\Carbon::parse($loan->tanggal_kembali_aktual ?? now())->diffInDays(\Carbon\Carbon::parse($loan->tanggal_kembali_rencana));
+                                        $returnDate = $loan->tanggal_kembali_aktual ? \Carbon\Carbon::parse($loan->tanggal_kembali_aktual) : now();
+                                        $plannedDate = \Carbon\Carbon::parse($loan->tanggal_kembali_rencana);
+                                        $lateDays = $returnDate->diffInDays($plannedDate);
                                     @endphp
                                     <span style="color:#cc0000; font-size:11px;">
                                         Telat {{ $lateDays }} hari
                                     </span>
-                                @elseif($loan->status == 'dikembalikan')
+                                @elseif($loan->status == 'kembali')
                                     <span style="color:#333; font-size:11px;">Tepat waktu</span>
                                 @else
                                     <span style="color:#999;">-</span>
@@ -478,7 +492,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5" style="color:#999;">
+                            <td colspan="8" class="text-center py-5" style="color:#999;">
                                 <i class="fas fa-inbox fa-2x mb-2 d-block" style="color:#ccc;"></i>
                                 Tidak ada data peminjaman
                             </td>
@@ -522,7 +536,7 @@
                 <p style="margin-top:5px; font-size:10px;">NIP. ________________</p>
             </div>
             <div class="signature-box">
-                <p>Cimahi, {{ date('d F Y') }}</p>
+                <p>Cimahi, {{ \Carbon\Carbon::now()->translatedFormat('d F Y H:i') }}</p>
                 <p><strong>Petugas Laboratorium</strong></p>
                 <br><br><br>
                 <div class="signature-line">({{ Auth::user()->name ?? 'Petugas' }})</div>
@@ -538,6 +552,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body> 
 </html>

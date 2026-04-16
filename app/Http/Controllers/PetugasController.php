@@ -60,7 +60,8 @@ class PetugasController extends Controller
 
         $loan->update([ 
             'status' => 'kembali', 
-            'tanggal_kembali_aktual' => now() 
+            'tanggal_kembali_aktual' => now(),
+            'petugas_id' => Auth::id() 
         ]); 
         $tool = Tool::find($loan->tool_id); 
         $tool->increment('stok'); 
@@ -80,7 +81,7 @@ class PetugasController extends Controller
     } 
  
     public function report(Request $request) {  
-        $loans = Loan::with(['user', 'tool'])->get(); 
+        $loans = Loan::with(['user', 'tool'])->orderBy('created_at', 'desc')->get(); 
         return view('petugas.laporan', compact('loans')); 
     } 
 } 

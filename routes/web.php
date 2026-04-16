@@ -33,8 +33,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register'); 
 Route::post('/register', [AuthController::class, 'register']); 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Google OAuth Routes
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback'); 
 
@@ -49,8 +47,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/fines/{id}/pay', [FineController::class, 'payForm'])->name('admin.fines.pay'); 
     Route::post('admin/fines/{id}/pay', [FineController::class, 'pay'])->name('admin.fines.process'); 
     Route::get('/admin/logs', function() { 
-        $logs = ActivityLog::with('user')->latest()->get(); 
-        return view('admin.logs', compact('logs')); 
+        $logs = ActivityLog::with('user')->whereHas('user', function($q) { 
+            $q->where('role', 'admin'); 
+        })->latest()->paginate(20); 
+ 
+        $stats = [ 
+            'login' => ActivityLog::whereHas('user', fn($q) => $q->where('role', 'admin'))->where('action', 'Login')->count(), 
+            'create' => ActivityLog::whereHas('user', fn($q) => $q->where('role', 'admin'))->whereIn('action', ['Create Loan', 'Tambah Kategori', 'Tambah Alat'])->count(), 
+            'update' => ActivityLog::whereHas('user', fn($q) => $q->where('role', 'admin'))->whereIn('action', ['Update Kategori', 'Update Alat'])->count(), 
+            'delete' => ActivityLog::whereHas('user', fn($q) => $q->where('role', 'admin'))->where('action', 'Hapus Kategori')->count(), 
+        ]; 
+ 
+        return view('admin.logs', compact('logs', 'stats')); 
     }); 
 
 }); 
