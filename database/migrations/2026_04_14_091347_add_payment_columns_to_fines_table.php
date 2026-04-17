@@ -10,16 +10,25 @@ return new class extends Migration
     {
         Schema::table('fines', function (Blueprint $table) {
             // Tambahkan kolom yang diperlukan untuk Midtrans
-            $table->string('order_id')->nullable()->after('id');
-            $table->string('payment_method')->nullable()->after('status');
-            $table->timestamp('payment_date')->nullable()->after('payment_method');
+            if (!Schema::hasColumn('fines', 'order_id')) {
+                $table->string('order_id')->nullable()->after('id');
+            }
+            if (!Schema::hasColumn('fines', 'payment_method')) {
+                $table->string('payment_method')->nullable()->after('status');
+            }
+            // payment_date sudah ada di create_fines_table migration
         });
     }
 
     public function down(): void
     {
         Schema::table('fines', function (Blueprint $table) {
-            $table->dropColumn(['order_id', 'payment_method', 'payment_date']);
+            if (Schema::hasColumn('fines', 'order_id')) {
+                $table->dropColumn('order_id');
+            }
+            if (Schema::hasColumn('fines', 'payment_method')) {
+                $table->dropColumn('payment_method');
+            }
         });
     }
 };

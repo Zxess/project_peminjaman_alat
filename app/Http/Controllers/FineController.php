@@ -55,9 +55,16 @@ class FineController extends Controller
             
             // Konfigurasi Midtrans
             Config::$serverKey = config('midtrans.server_key');
+            Config::$clientKey = config('midtrans.client_key');
             Config::$isProduction = config('midtrans.is_production', false);
             Config::$isSanitized = true;
             Config::$is3ds = true;
+            
+            // Debug logging
+            Log::debug('Midtrans Config - Merchant: ' . config('midtrans.merchant_id'));
+            Log::debug('Midtrans Config - Client Key Length: ' . strlen(config('midtrans.client_key')));
+            Log::debug('Midtrans Config - Server Key Length: ' . strlen(config('midtrans.server_key')));
+            Log::debug('Midtrans Config - Is Production: ' . (config('midtrans.is_production') ? 'true' : 'false'));
             
             // Generate order ID unik
             $orderId = 'FINE-' . $fine->id . '-' . time();
